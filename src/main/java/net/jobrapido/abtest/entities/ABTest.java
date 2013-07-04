@@ -52,6 +52,11 @@ public class ABTest {
 		setActive( false );
 	}
 	
+	public boolean disable(){
+		setActive( false );
+		setFinishedAt(new Date());
+		return isActive();
+	}
 	
 	public boolean activate(){
 		setActive( true );
@@ -118,6 +123,14 @@ public class ABTest {
 		
 		return sb.toString();
 	}
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+		ABTest objABTest = (ABTest) obj;
+		return objABTest.getName().equals(getName()) && objABTest.getId() == getId();
+	}
+	
 	
 	
 	

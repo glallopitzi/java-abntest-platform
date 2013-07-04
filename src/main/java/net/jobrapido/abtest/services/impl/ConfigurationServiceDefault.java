@@ -104,20 +104,28 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 
 	@Override
 	public boolean addABTest(ABTest abtest) {
-		allConfiguredABTests.add(abtest);
-		
-		return true;
+		if (allConfiguredABTests.add(abtest)){
+			return flushAndReloadConfiguration();
+		} 
+		return false;
 	}
 
 	@Override
 	public boolean removeABTest(ABTest abtest) {
-		allConfiguredABTests.remove(abtest);
+		if (allConfiguredABTests.remove(abtest)){
+			return flushAndReloadConfiguration();
+		} 
 		return false;
 	}
 
 	@Override
 	public boolean updateABTest(ABTest abtest) {
-		// TODO Auto-generated method stub
+		int index = allConfiguredABTests.indexOf(abtest);
+		if ( index >= 0){
+			if (allConfiguredABTests.set( index, abtest ) != null){
+				return flushAndReloadConfiguration();
+			}
+		}
 		return false;
 	}
 

@@ -1,5 +1,6 @@
 package net.jobrapido.abtest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -44,6 +45,26 @@ public class ABTestManager {
 	
 	
 	
+	public ABTest createDummyABTest(String name, long id) {
+    	ABTest abTest = null;
+  		List<ABTestCluster> abTestClustersFiftyFifty = new ArrayList<ABTestCluster>();
+  		abTestClustersFiftyFifty.add(new ABTestCluster(1l, 1l));
+  		abTestClustersFiftyFifty.add(new ABTestCluster(2l, 1l));
+  		abTest = new ABTest( name, id );
+	    abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
+	    abTest.setClusters(abTestClustersFiftyFifty);
+		return abTest;
+	}
+	
+	
+	public void printActiveTests(){
+		System.out.println("-- BEGIN ACTIVE TESTS");
+		for (ABTest configuredABTest : allActiveABTests) {
+			System.out.println(configuredABTest.toString());
+			System.out.println("--------");
+		}
+		System.out.println("---- END ACTIVE TESTS");
+	}
 	
 	public void printCurrentConfiguration(){
 		System.out.println("-- BEGIN");
@@ -56,20 +77,28 @@ public class ABTestManager {
 	
 	
 	
-	public boolean createABTest(String name, long id){return false;}
 	
 	public boolean createABTest(ABTest abtest){
-		configurationService.addABTest(abtest);
-		return false;
+		return configurationService.addABTest(abtest);
 	}
 	
-	public boolean removeABTest(ABTest abtest){return false;}
+	public boolean removeABTest(ABTest abtest){
+		return configurationService.removeABTest(abtest);
+	}
 	
-	public boolean updateABTest(ABTest abtest){return false;}
+	public boolean updateABTest(ABTest abtest){
+		return configurationService.updateABTest(abtest);
+	}
 	
-	public boolean enableABTest(ABTest abtest){return false;}
+	public boolean enableABTest(ABTest abtest){
+		abtest.activate();
+		return configurationService.updateABTest(abtest);
+	}
 	
-	public boolean disableABTest(ABTest abtest){return false;}
+	public boolean disableABTest(ABTest abtest){
+		abtest.disable();
+		return configurationService.updateABTest(abtest);
+	}
 	
 	
 	
