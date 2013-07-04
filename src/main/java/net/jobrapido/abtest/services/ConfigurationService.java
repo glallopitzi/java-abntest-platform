@@ -13,6 +13,7 @@ public interface ConfigurationService {
 	public List<ABTest> getAllActiveABTestsFromDB();
 	
 	public boolean flushConfigurationToFile();
+	public boolean flushConfigurationToDB();
 	
 	public boolean addABTest(ABTest abtest);
 	public boolean removeABTest(ABTest abtest);

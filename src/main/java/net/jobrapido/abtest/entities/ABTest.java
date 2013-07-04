@@ -24,6 +24,7 @@ public class ABTest {
 	private Date startedAt;
 	private Date finishedAt;
 	
+	private ABTestOEC overallEvaluationCriterion;
 	
 	public ABTest(String name, long id, String hashKey) {
 		setId( id );

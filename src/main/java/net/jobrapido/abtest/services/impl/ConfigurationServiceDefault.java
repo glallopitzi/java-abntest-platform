@@ -137,4 +137,10 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 		return false;
 	}
 
+	@Override
+	public boolean flushConfigurationToDB() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
