@@ -1,88 +1,43 @@
 package net.jobrapido.abtest.services.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import net.jobrapido.abtest.entities.ABTest;
-import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.services.ConfigurationService;
 import net.jobrapido.abtest.services.HashingService;
+
+import org.apache.commons.io.FileUtils;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.inject.Inject;
 
 public class ConfigurationServiceDefault implements ConfigurationService {
 
 	
-	@Inject HashingService hashingService;
+	@Inject private HashingService hashingService;
+	
+	private final static String CONFIGURATION_FILENAME = "C:/abtestConfiguration";
+	
+	private List<ABTest> allConfiguredABTests;
+	
 	
 	@Override
 	public List<ABTest> getAllConfiguredABTests() {
-		
-		// TODO get info from configuration file or from global on mongo db, for now we assume we can get this info
-		
-		List<ABTest> allConfiguredABTest = new ArrayList<ABTest>();
-		ABTest abTest = null;
-		List<ABTestCluster> abTestClustersFiftyFifty = new ArrayList<ABTestCluster>();
-		abTestClustersFiftyFifty.add(new ABTestCluster(1l, 1l));
-		abTestClustersFiftyFifty.add(new ABTestCluster(2l, 1l));
-		
-		List<ABTestCluster> abTestClusters2 = new ArrayList<ABTestCluster>();
-		abTestClusters2.add(new ABTestCluster(1l, 1l));
-		abTestClusters2.add(new ABTestCluster(2l, 3l));
-		abTestClusters2.add(new ABTestCluster(3l, 6l));
-		
-		abTest = new ABTest( "prova 1", 1l );
-		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-		abTest.setClusters(abTestClustersFiftyFifty);
-		allConfiguredABTest.add( abTest );
-		
-		abTest = new ABTest( "conversion rate", 2l );
-		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-		abTest.setClusters(abTestClustersFiftyFifty);
-		allConfiguredABTest.add( abTest );
-
-		abTest = new ABTest( "prova 3", 3l );
-		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-		abTest.setClusters(abTestClusters2);
-		abTest.activate();
-		allConfiguredABTest.add( abTest );
-		
-		abTest = new ABTest( "prova 4", 4l );
-		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-		abTest.setClusters(abTestClusters2);
-		allConfiguredABTest.add( abTest );
-		
-		abTest = new ABTest( "email translation", 5l );
-		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-		abTest.setClusters(abTestClusters2);
-		abTest.activate();
-		allConfiguredABTest.add( abTest );
-		
-		abTest = new ABTest( "prova 6", 6l );
-		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-		abTest.setClusters(abTestClusters2);
-		allConfiguredABTest.add( abTest );
-		
-		abTest = new ABTest( "prova 7", 7l );
-		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-		abTest.setClusters(abTestClustersFiftyFifty);
-		allConfiguredABTest.add( abTest );
-		
-		abTest = new ABTest( "link to inbox two", 8l );
-		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-		abTest.setClusters(abTestClusters2);
-		abTest.activate();
-		abTest.close();
-		allConfiguredABTest.add( abTest );
-		
-		return allConfiguredABTest;
+		if ( allConfiguredABTests == null ) { loadConfigurationFromFile(); }
+		return this.allConfiguredABTests;
 	}
 
 	@Override
 	public List<ABTest> getAllActiveABTests() {
-		List<ABTest> allConfiguredABTests = getAllConfiguredABTests();
+		if ( allConfiguredABTests == null ) { loadConfigurationFromFile(); }
 		List<ABTest> allActiveABTests = new ArrayList<ABTest>();
-		for (ABTest abTest : allConfiguredABTests) {
+		for (ABTest abTest : this.allConfiguredABTests) {
 			if (abTest.isActive()) allActiveABTests.add(abTest);
 		}
 		return allActiveABTests;
@@ -112,11 +67,53 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 		return null;
 	}
 
+	
+
+	@Override
+	public boolean loadConfigurationFromFile() {
+		File configFile = new File(CONFIGURATION_FILENAME);
+		try {
+			Gson gson = new Gson();
+			JsonParser parser = new JsonParser();
+			
+			String configString = FileUtils.readFileToString(configFile);
+			JsonArray array = parser.parse(configString).getAsJsonArray();
+			ArrayList<ABTest> abtests = new ArrayList<ABTest>();
+			for(JsonElement obj : array){
+				ABTest elem = gson.fromJson(obj, ABTest.class);
+				abtests.add(elem);
+			}
+			setAllConfiguredABTests(abtests);
+			
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
 	@Override
 	public boolean flushConfigurationToFile() {
-		// TODO Auto-generated method stub
 		System.out.println("flush configuration on file or over global on mongo db");
-		return false;
+		
+		StringBuilder sb = new StringBuilder(200);
+		
+		Gson gson = new Gson();
+		sb.append(gson.toJson(getAllConfiguredABTests()));
+		
+		File configFile = new File(CONFIGURATION_FILENAME);
+		try {
+			FileUtils.touch(configFile);
+			FileUtils.writeStringToFile(configFile, sb.toString());
+			
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
@@ -141,6 +138,17 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 	public boolean flushConfigurationToDB() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+
+	@Override
+	public boolean loadConfigurationFromDB() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void setAllConfiguredABTests(List<ABTest> allConfiguredABTests) {
+		this.allConfiguredABTests = allConfiguredABTests;
 	}
 
 }

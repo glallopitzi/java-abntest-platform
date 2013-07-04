@@ -12,7 +12,9 @@ public interface ConfigurationService {
 	public List<ABTest> getAllActiveABTestsFromFile();
 	public List<ABTest> getAllActiveABTestsFromDB();
 	
+	public boolean loadConfigurationFromFile();
 	public boolean flushConfigurationToFile();
+	public boolean loadConfigurationFromDB();
 	public boolean flushConfigurationToDB();
 	
 	public boolean addABTest(ABTest abtest);

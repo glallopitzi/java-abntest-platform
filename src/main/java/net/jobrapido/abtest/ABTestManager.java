@@ -25,8 +25,10 @@ public class ABTestManager {
 	private List<ABTest> allActiveABTests;
 	
 	public void init(){
-		setAllConfiguredABTests(getAllConfiguredABTests());
-		setAllActiveABTests(getAllActiveABTests());
+		configurationService.loadConfigurationFromFile();
+		
+		setAllConfiguredABTests(configurationService.getAllConfiguredABTests());
+		setAllActiveABTests(configurationService.getAllActiveABTests());
 	}
 	
 	public void reloadConfiguration(){
@@ -37,13 +39,7 @@ public class ABTestManager {
 		configurationService.flushConfigurationToFile();
 	}
 	
-	public List<ABTest> getAllConfiguredABTests(){
-		return configurationService.getAllConfiguredABTests();
-	}
 	
-	public List<ABTest> getAllActiveABTests(){
-		return configurationService.getAllActiveABTests();
-	}
 	
 	public void printCurrentConfiguration(){
 		System.out.println("-- BEGIN");
@@ -56,39 +52,36 @@ public class ABTestManager {
 	
 	
 	
-	public boolean createABTest(String name, long id){
-		
-		return false;
-	}
+	public boolean createABTest(String name, long id){return false;}
 	
-	public boolean createABTest(ABTest abtest){
-		
-		return false;
-	}
+	public boolean createABTest(ABTest abtest){return false;}
 	
-	public boolean removeABTest(ABTest abtest){
-		return false;
-	}
+	public boolean removeABTest(ABTest abtest){return false;}
 	
-	public boolean updateABTest(ABTest abtest){
-		return false;
-	}
+	public boolean updateABTest(ABTest abtest){return false;}
 	
-	public boolean enableABTest(ABTest abtest){
-		return false;
-	}
+	public boolean enableABTest(ABTest abtest){return false;}
 	
-	public boolean disableABTest(ABTest abtest){
-		return false;
-	}
+	public boolean disableABTest(ABTest abtest){return false;}
 	
 	
 	
-	public ABTestCluster getABTestClusterForUser(ABTestUser abtestUser){
-		
-		return null;
-	}
+	
+	public ABTestCluster getABTestClusterForUser(ABTestUser abtestUser){return null;}
 
+	
+	
+	
+	
+	
+	public List<ABTest> getAllConfiguredABTests(){
+		return this.allConfiguredABTests;
+	}
+	
+	public List<ABTest> getAllActiveABTests(){
+		return this.allActiveABTests;
+	}
+	
 	public void setAllConfiguredABTests(List<ABTest> allConfiguredABTests) {
 		this.allConfiguredABTests = allConfiguredABTests;
 	}

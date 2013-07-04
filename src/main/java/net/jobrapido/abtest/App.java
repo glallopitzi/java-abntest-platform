@@ -20,6 +20,8 @@ public class App {
 		
 		abTestManager.printCurrentConfiguration();
 		
+//		abTestManager.flushConfiguration();
+		
 		System.out.println( "Demo END" );
 	}
 	
