@@ -1,10 +1,7 @@
 package net.jobrapido.abtest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.jobrapido.abtest.entities.ABTest;
-import net.jobrapido.abtest.entities.ABTestCluster;
+import net.jobrapido.abtest.entities.ABTestUser;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -21,17 +18,27 @@ public class App {
 	
 	public void run(){
 		System.out.println( "Demo begin.." );
+		
 		// call this at very beginning of your app
 		abTestManager.init();
 		
 		
+		ABTestUser dummyABTestUser = abTestManager.createDummyABTestUser("giancarlolallopizzi@gmail.com");
+		
+		
+		
+		
+//		ABTest abTestByName = abTestManager.getABTestByName("dummy perfect final");
+//		abTestManager.disableABTest(abTestByName);
+//		abTestManager.enableABTest(abTestByName);
+//		abTestManager.printActiveTests();
 		
 //		List<ABTest> allConfiguredABTests = abTestManager.getAllConfiguredABTests();
-		abTestManager.printActiveTests();
-		ABTest createDummyABTest = abTestManager.createDummyABTest("dummy perfect 2", 19l);
-		abTestManager.createABTest(createDummyABTest);
-		abTestManager.enableABTest(createDummyABTest);
-		abTestManager.printActiveTests();
+//		abTestManager.printActiveTests();
+//		ABTest createDummyABTest = abTestManager.createDummyABTest("dummy perfect final", new Date().getTime());
+//		abTestManager.createABTest(createDummyABTest);
+//		abTestManager.enableABTest(createDummyABTest);
+//		abTestManager.printActiveTests();
 //		abTestManager.printCurrentConfiguration();
 		
 //		abTestManager.flushConfiguration();

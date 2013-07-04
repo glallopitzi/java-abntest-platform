@@ -23,15 +23,9 @@ public class ABTestManager {
 	@Inject private DataPathService dataPathService;
 	@Inject private ConfigurationService configurationService;
 	@Inject private HashingService hashingService;
-	
-	private List<ABTest> allConfiguredABTests;
-	private List<ABTest> allActiveABTests;
-	
+		
 	public void init(){
 		configurationService.loadConfiguration();
-		
-		setAllConfiguredABTests(configurationService.getAllConfiguredABTests());
-		setAllActiveABTests(configurationService.getAllActiveABTests());
 	}
 	
 	public void reloadConfiguration(){
@@ -56,10 +50,16 @@ public class ABTestManager {
 		return abTest;
 	}
 	
+	public ABTestUser createDummyABTestUser(String name){
+		ABTestUser abTestUser = new ABTestUser();
+		abTestUser.setUserId(name);
+		abTestUser.setHashKey(hashingService.getHashOfGivenString(name));
+		return abTestUser;
+	}
 	
 	public void printActiveTests(){
 		System.out.println("-- BEGIN ACTIVE TESTS");
-		for (ABTest configuredABTest : allActiveABTests) {
+		for (ABTest configuredABTest : configurationService.getAllActiveABTests()) {
 			System.out.println(configuredABTest.toString());
 			System.out.println("--------");
 		}
@@ -68,7 +68,7 @@ public class ABTestManager {
 	
 	public void printCurrentConfiguration(){
 		System.out.println("-- BEGIN");
-		for (ABTest configuredABTest : allConfiguredABTests) {
+		for (ABTest configuredABTest : configurationService.getAllConfiguredABTests()) {
 			System.out.println(configuredABTest.toString());
 			System.out.println("--------");
 		}
@@ -103,27 +103,17 @@ public class ABTestManager {
 	
 	
 	
-	public ABTestCluster getABTestClusterForUser(ABTestUser abtestUser){return null;}
+	
+	public ABTest getABTestByName(String name){
+		for (ABTest abtest : configurationService.getAllConfiguredABTests()) {
+			if (abtest.getName().equals(name)) return abtest;
+		}
+		return null;
+	}
+	
+	
+	public ABTest getABTestForUser(ABTestUser abtestUser){return null;}
+	public ABTestCluster getABTestClusterForUserAndABTest(ABTestUser abtestUser){return null;}
 
-	
-	
-	
-	
-	
-	public List<ABTest> getAllConfiguredABTests(){
-		return this.allConfiguredABTests;
-	}
-	
-	public List<ABTest> getAllActiveABTests(){
-		return this.allActiveABTests;
-	}
-	
-	public void setAllConfiguredABTests(List<ABTest> allConfiguredABTests) {
-		this.allConfiguredABTests = allConfiguredABTests;
-	}
-
-	public void setAllActiveABTests(List<ABTest> allActiveABTests) {
-		this.allActiveABTests = allActiveABTests;
-	}
 
 }
