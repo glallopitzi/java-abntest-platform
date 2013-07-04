@@ -14,6 +14,7 @@ import net.jobrapido.abtest.services.impl.StatisticalServiceTTest;
 import net.jobrapido.abtest.services.impl.UserAssignmentServiceDefault;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 
 public class AppModule extends AbstractModule {
 
@@ -23,7 +24,7 @@ public class AppModule extends AbstractModule {
 		bind(UserAssignmentService.class).to(UserAssignmentServiceDefault.class);
 		bind(DataPathService.class).to(DataPathServiceDefault.class);
 		bind(StatisticalService.class).to(StatisticalServiceTTest.class);
-		bind(ConfigurationService.class).to(ConfigurationServiceDefault.class);
+		bind(ConfigurationService.class).to(ConfigurationServiceDefault.class).in(Singleton.class);
 		bind(HashingService.class).to(HashingServiceMD5.class);
 	}
 	

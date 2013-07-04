@@ -53,6 +53,15 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 		return allActiveABTests;
 	}
 
+	@Override
+	public long getTotalActiveTestsWeight() {
+		long tot = 0;
+		List<ABTest> allActiveABTests = getAllActiveABTests();
+		for (ABTest abTest : allActiveABTests) {
+			tot += abTest.getTestWeight();
+		}
+		return tot;
+	}
 	
 
 	@Override

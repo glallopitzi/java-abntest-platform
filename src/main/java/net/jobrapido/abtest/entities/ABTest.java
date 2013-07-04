@@ -11,6 +11,7 @@ import java.util.List;
 public class ABTest {
 	private long id;
 	private boolean isActive;
+	private long testWeight;
 	
 	private String name;
 	private String hashKey;
@@ -19,7 +20,7 @@ public class ABTest {
 	private long clustersWeigth;
 	
 	private boolean hasWinner;
-
+	
 	private Date createdAt;
 	private Date startedAt;
 	private Date finishedAt;
@@ -33,7 +34,7 @@ public class ABTest {
 		setHashKey( hashKey );
 		setCreatedAt( new Date() );
 		setHasWinner( false );
-		
+		setTestWeight(1l);
 	}
 	
 	public ABTest(String name, long id) {
@@ -43,14 +44,20 @@ public class ABTest {
 		setHashKey( calculateHashKey() );
 		setCreatedAt( new Date() );
 		setHasWinner( false );
-		
+		setTestWeight(1l);
 	}
 	
 	public ABTest() {
 		setCreatedAt( new Date() );
 		setHasWinner( false );
 		setActive( false );
+		setTestWeight(1l);
 	}
+	
+	
+	
+	
+	
 	
 	public boolean disable(){
 		setActive( false );
@@ -104,6 +111,7 @@ public class ABTest {
 		String finishedAt = isHasWinner() ? getFinishedAt().toString() : "";
 		
 		sb.append("ABTest[name("+getName()+"), ");
+		sb.append("weigth("+getTestWeight()+"), ");
 		sb.append("hashKey("+getHashKey()+"), ");
 		sb.append("createdAt("+createdAt+"), ");
 		sb.append("isActive("+isActive+"), ");
@@ -148,6 +156,14 @@ public class ABTest {
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public long getTestWeight() {
+		return testWeight;
+	}
+
+	public void setTestWeight(long testWeight) {
+		this.testWeight = testWeight;
 	}
 
 	public String getName() {

@@ -1,5 +1,7 @@
 package net.jobrapido.abtest.services.impl;
 
+import java.util.List;
+
 import com.google.inject.Inject;
 
 import net.jobrapido.abtest.entities.ABTest;
@@ -16,14 +18,20 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 	
 	@Override
 	public ABTest getABTestForUser(ABTestUser abTestUser) {
-		// TODO check if robot here? in that case return null
+		List<ABTest> allActiveABTests = configurationService.getAllActiveABTests();
+		long totalActiveTestsWeight = configurationService.getTotalActiveTestsWeight();
+		
+		// TODO 
+		
 		return null;
 	}
 
 	@Override
 	public ABTestCluster getABTestClusterForUserAndABTest(ABTest abTest,
 			ABTestUser abTestUser) {
-		// TODO Auto-generated method stub
+		
+		List<ABTestCluster> abTestClusters = abTest.getClusters();
+		
 		return null;
 	}
 

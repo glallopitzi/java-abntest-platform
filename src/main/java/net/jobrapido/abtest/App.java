@@ -1,5 +1,8 @@
 package net.jobrapido.abtest;
 
+import java.util.Date;
+import java.util.List;
+
 import net.jobrapido.abtest.entities.ABTest;
 import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.entities.ABTestUser;
@@ -18,67 +21,64 @@ public class App {
 	
 	
 	public void run(){
-		System.out.println( "Demo begin.." );
+		System.out.println( "------------ Demo begin.." );
 		
 		// call this at very beginning of your app
 		abTestManager.init();
 		
+//		createSomeABTest("change me");
 		
-		ABTestUser dummyABTestUser = abTestManager.createDummyABTestUser("giancarlolallopizzi@gmail.com");
-		ABTest abTestForUser = abTestManager.getABTestForUser(dummyABTestUser);
-		ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
+//		modifySomeABTest("change me");
 		
+//		evaluateSomeUser("giancarlolallopizzi@gmail.com");
 		
+//		evaluateSomeUser("giancarlo.lallopizzi@jobrapido.com");
+//		
+//		evaluateSomeUser("123322432");
+//		evaluateSomeUser("123322433");
+//		evaluateSomeUser("123322434");
 		
-//		ABTest abTestByName = abTestManager.getABTestByName("dummy perfect final");
-//		abTestManager.disableABTest(abTestByName);
-//		abTestManager.enableABTest(abTestByName);
-//		abTestManager.printActiveTests();
+		abTestManager.printCurrentConfiguration();
 		
-//		List<ABTest> allConfiguredABTests = abTestManager.getAllConfiguredABTests();
-//		abTestManager.printActiveTests();
-//		ABTest createDummyABTest = abTestManager.createDummyABTest("dummy perfect final", new Date().getTime());
-//		abTestManager.createABTest(createDummyABTest);
-//		abTestManager.enableABTest(createDummyABTest);
-//		abTestManager.printActiveTests();
-//		abTestManager.printCurrentConfiguration();
-		
-//		abTestManager.flushConfiguration();
-		
-		System.out.println( "Demo END" );
+		System.out.println( "------------ Demo END" );
+	}
+
+
+
+	
+	
+	
+	private void evaluateSomeUser(String userId) {
+		ABTestUser dummyABTestUser = abTestManager.createDummyABTestUser( userId );
+		ABTest abTestForUser = abTestManager.getABTestForUser( dummyABTestUser );
+		if ( abTestForUser != null ){
+			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
+			System.out.println( abTestClusterForUserAndABTest.toString() );
+			
+		} else {
+			System.out.println("the user \"" + userId + "\" is not assigned to any test");
+		}
 	}
 	
+	private void modifySomeABTest(String name){
+		ABTest abTestByName = abTestManager.getABTestByName(name);
+		abTestManager.disableABTest(abTestByName);
+		abTestManager.enableABTest(abTestByName);
+		abTestManager.printActiveTests();
+	}
+
+	private void createSomeABTest(String name) {
+		ABTest createDummyABTest = abTestManager.createDummyABTest(name, new Date().getTime());
+		abTestManager.createABTest(createDummyABTest);
+		abTestManager.enableABTest(createDummyABTest);
+		abTestManager.printCurrentConfiguration();
+	}
+
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+	
+	
 
 
 

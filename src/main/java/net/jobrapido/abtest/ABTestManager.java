@@ -22,7 +22,18 @@ public class ABTestManager {
 	@Inject private ConfigurationService configurationService;
 	@Inject private HashingService hashingService;
 
-	
+
+	/*
+	 * Configuration related methods (init, flush, reload, add, del, upd, anable, disable)
+	 * - init: initialize configuration, load persisted conf in memory
+	 * - flush: persist configuration
+	 * - reload: 
+	 * - add: add a new test
+	 * - del: remove a test
+	 * - upd: update a test
+	 * ..
+	 */
+
 	public void init(){
 		configurationService.loadConfiguration();
 	}
@@ -34,16 +45,6 @@ public class ABTestManager {
 	public void flushConfiguration(){
 		configurationService.flushConfiguration();
 	}
-	
-	
-	
-	
-	
-	
-	
-	/*
-	 * Configuration related methods (add, del, upd, etc..)
-	 */
 	
 	public boolean createABTest(ABTest abtest){
 		return configurationService.addABTest(abtest);
@@ -71,7 +72,10 @@ public class ABTestManager {
 	
 	
 	
-	
+	/*
+	 * User related methods (test/cluster assignment, get active test for user, etc..)
+	 * 
+	 */
 	
 	public ABTest getABTestByName(String name){
 		for (ABTest abtest : configurationService.getAllConfiguredABTests()) {
@@ -79,7 +83,6 @@ public class ABTestManager {
 		}
 		return null;
 	}
-	
 	
 	public ABTest getABTestForUser(ABTestUser abtestUser){
 		return assignmentService.getABTestForUser(abtestUser);
@@ -102,7 +105,7 @@ public class ABTestManager {
 	
 	
 	/*
-	 * Utilities development methods
+	 * Development utilities methods
 	 * 
 	 * 
 	 */
@@ -121,7 +124,7 @@ public class ABTestManager {
 	public ABTestUser createDummyABTestUser(String name){
 		ABTestUser abTestUser = new ABTestUser();
 		abTestUser.setUserId(name);
-		abTestUser.setHashKey(hashingService.getHashOfGivenString(name));
+		abTestUser.setHashKey( hashingService.getHashOfGivenString( name ) );
 		return abTestUser;
 	}
 	
