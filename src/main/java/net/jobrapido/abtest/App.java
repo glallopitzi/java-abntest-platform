@@ -26,7 +26,8 @@ public class App {
 		// call this at very beginning of your app
 		abTestManager.init();
 		
-//		createSomeABTest("change me");
+		createSomeABTest("link to inbox two");
+		createSomeABTest("link to inbox three");
 		
 //		modifySomeABTest("change me");
 		

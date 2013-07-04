@@ -135,8 +135,7 @@ public class ABTest {
 	
 	@Override
 	public boolean equals(Object obj) {
-		ABTest objABTest = (ABTest) obj;
-		return objABTest.getName().equals(getName()) && objABTest.getId() == getId();
+		return ((ABTest)obj).getHashKey().equals(getHashKey());
 	}
 	
 	
