@@ -1,6 +1,7 @@
 package net.jobrapido.abtest;
 
 import net.jobrapido.abtest.entities.ABTest;
+import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.entities.ABTestUser;
 
 import com.google.inject.Guice;
@@ -24,7 +25,8 @@ public class App {
 		
 		
 		ABTestUser dummyABTestUser = abTestManager.createDummyABTestUser("giancarlolallopizzi@gmail.com");
-		
+		ABTest abTestForUser = abTestManager.getABTestForUser(dummyABTestUser);
+		ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
 		
 		
 		

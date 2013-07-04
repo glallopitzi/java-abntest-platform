@@ -3,33 +3,32 @@ package net.jobrapido.abtest;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import net.jobrapido.abtest.entities.ABTest;
 import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.entities.ABTestUser;
 import net.jobrapido.abtest.services.ConfigurationService;
 import net.jobrapido.abtest.services.DataPathService;
 import net.jobrapido.abtest.services.HashingService;
-import net.jobrapido.abtest.services.RandomizationService;
 import net.jobrapido.abtest.services.StatisticalService;
 import net.jobrapido.abtest.services.UserAssignmentService;
 
+import com.google.inject.Inject;
+
 public class ABTestManager {
 	
-	@Inject private RandomizationService randomizationService;
 	@Inject private StatisticalService statisticalService;
 	@Inject private UserAssignmentService assignmentService;
 	@Inject private DataPathService dataPathService;
 	@Inject private ConfigurationService configurationService;
 	@Inject private HashingService hashingService;
-		
+
+	
 	public void init(){
 		configurationService.loadConfiguration();
 	}
 	
 	public void reloadConfiguration(){
-		init();
+		configurationService.loadConfiguration();
 	}
 	
 	public void flushConfiguration(){
@@ -38,6 +37,75 @@ public class ABTestManager {
 	
 	
 	
+	
+	
+	
+	
+	/*
+	 * Configuration related methods (add, del, upd, etc..)
+	 */
+	
+	public boolean createABTest(ABTest abtest){
+		return configurationService.addABTest(abtest);
+	}
+	
+	public boolean removeABTest(ABTest abtest){
+		return configurationService.removeABTest(abtest);
+	}
+	
+	public boolean updateABTest(ABTest abtest){
+		return configurationService.updateABTest(abtest);
+	}
+	
+	public boolean enableABTest(ABTest abtest){
+		abtest.activate();
+		return configurationService.updateABTest(abtest);
+	}
+	
+	public boolean disableABTest(ABTest abtest){
+		abtest.disable();
+		return configurationService.updateABTest(abtest);
+	}
+	
+	
+	
+	
+	
+	
+	
+	public ABTest getABTestByName(String name){
+		for (ABTest abtest : configurationService.getAllConfiguredABTests()) {
+			if (abtest.getName().equals(name)) return abtest;
+		}
+		return null;
+	}
+	
+	
+	public ABTest getABTestForUser(ABTestUser abtestUser){
+		return assignmentService.getABTestForUser(abtestUser);
+	}
+	
+	public ABTestCluster getABTestClusterForUserAndABTest(ABTest abTest, ABTestUser abtestUser){
+		return assignmentService.getABTestClusterForUserAndABTest(abTest, abtestUser);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * Utilities development methods
+	 * 
+	 * 
+	 */
 	
 	public ABTest createDummyABTest(String name, long id) {
     	ABTest abTest = null;
@@ -74,46 +142,4 @@ public class ABTestManager {
 		}
 		System.out.println("---- END");
 	}
-	
-	
-	
-	
-	public boolean createABTest(ABTest abtest){
-		return configurationService.addABTest(abtest);
-	}
-	
-	public boolean removeABTest(ABTest abtest){
-		return configurationService.removeABTest(abtest);
-	}
-	
-	public boolean updateABTest(ABTest abtest){
-		return configurationService.updateABTest(abtest);
-	}
-	
-	public boolean enableABTest(ABTest abtest){
-		abtest.activate();
-		return configurationService.updateABTest(abtest);
-	}
-	
-	public boolean disableABTest(ABTest abtest){
-		abtest.disable();
-		return configurationService.updateABTest(abtest);
-	}
-	
-	
-	
-	
-	
-	public ABTest getABTestByName(String name){
-		for (ABTest abtest : configurationService.getAllConfiguredABTests()) {
-			if (abtest.getName().equals(name)) return abtest;
-		}
-		return null;
-	}
-	
-	
-	public ABTest getABTestForUser(ABTestUser abtestUser){return null;}
-	public ABTestCluster getABTestClusterForUserAndABTest(ABTestUser abtestUser){return null;}
-
-
 }
