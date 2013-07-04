@@ -13,11 +13,6 @@ public interface ConfigurationService {
 	public boolean flushAndReloadConfiguration();
 	public boolean loadConfiguration();
 	
-	public boolean loadConfigurationFromFile();
-	public boolean flushConfigurationToFile();
-	public boolean loadConfigurationFromDB();
-	public boolean flushConfigurationToDB();
-	
 	public boolean addABTest(ABTest abtest);
 	public boolean removeABTest(ABTest abtest);
 	public boolean updateABTest(ABTest abtest);

@@ -15,7 +15,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-public class ConfigurationServiceDefault implements ConfigurationService {
+public class ConfigurationServiceFile implements ConfigurationService {
 
 	
 	private final static String CONFIGURATION_FILENAME = "C:/abtestConfiguration";
@@ -24,7 +24,24 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 	
 	@Override
 	public boolean flushConfiguration() {
-		return flushConfigurationToFile();
+		System.out.println("flush configuration on file or over global on mongo db");
+		
+		StringBuilder sb = new StringBuilder(200);
+		
+		Gson gson = new Gson();
+		sb.append(gson.toJson(getAllConfiguredABTests()));
+		
+		File configFile = new File(CONFIGURATION_FILENAME);
+		try {
+			FileUtils.touch(configFile);
+			FileUtils.writeStringToFile(configFile, sb.toString());
+			
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
@@ -34,7 +51,26 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 
 	@Override
 	public boolean loadConfiguration() {
-		return loadConfigurationFromFile();
+		File configFile = new File(CONFIGURATION_FILENAME);
+		try {
+			Gson gson = new Gson();
+			JsonParser parser = new JsonParser();
+			
+			String configString = FileUtils.readFileToString(configFile);
+			JsonArray array = parser.parse(configString).getAsJsonArray();
+			ArrayList<ABTest> abtests = new ArrayList<ABTest>();
+			for(JsonElement obj : array){
+				ABTest elem = gson.fromJson(obj, ABTest.class);
+				abtests.add(elem);
+			}
+			setAllConfiguredABTests(abtests);
+			
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	@Override
@@ -65,53 +101,6 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 	
 
 	@Override
-	public boolean loadConfigurationFromFile() {
-		File configFile = new File(CONFIGURATION_FILENAME);
-		try {
-			Gson gson = new Gson();
-			JsonParser parser = new JsonParser();
-			
-			String configString = FileUtils.readFileToString(configFile);
-			JsonArray array = parser.parse(configString).getAsJsonArray();
-			ArrayList<ABTest> abtests = new ArrayList<ABTest>();
-			for(JsonElement obj : array){
-				ABTest elem = gson.fromJson(obj, ABTest.class);
-				abtests.add(elem);
-			}
-			setAllConfiguredABTests(abtests);
-			
-			return true;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		
-	}
-	
-	@Override
-	public boolean flushConfigurationToFile() {
-		System.out.println("flush configuration on file or over global on mongo db");
-		
-		StringBuilder sb = new StringBuilder(200);
-		
-		Gson gson = new Gson();
-		sb.append(gson.toJson(getAllConfiguredABTests()));
-		
-		File configFile = new File(CONFIGURATION_FILENAME);
-		try {
-			FileUtils.touch(configFile);
-			FileUtils.writeStringToFile(configFile, sb.toString());
-			
-			return true;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	@Override
 	public boolean addABTest(ABTest abtest) {
 		if (allConfiguredABTests.add(abtest)){
 			return flushAndReloadConfiguration();
@@ -135,19 +124,6 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 				return flushAndReloadConfiguration();
 			}
 		}
-		return false;
-	}
-
-	@Override
-	public boolean flushConfigurationToDB() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	@Override
-	public boolean loadConfigurationFromDB() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
