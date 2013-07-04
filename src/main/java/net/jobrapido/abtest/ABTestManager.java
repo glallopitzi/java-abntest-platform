@@ -9,6 +9,7 @@ import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.entities.ABTestUser;
 import net.jobrapido.abtest.services.ConfigurationService;
 import net.jobrapido.abtest.services.DataPathService;
+import net.jobrapido.abtest.services.HashingService;
 import net.jobrapido.abtest.services.RandomizationService;
 import net.jobrapido.abtest.services.StatisticalService;
 import net.jobrapido.abtest.services.UserAssignmentService;
@@ -20,12 +21,13 @@ public class ABTestManager {
 	@Inject private UserAssignmentService assignmentService;
 	@Inject private DataPathService dataPathService;
 	@Inject private ConfigurationService configurationService;
+	@Inject private HashingService hashingService;
 	
 	private List<ABTest> allConfiguredABTests;
 	private List<ABTest> allActiveABTests;
 	
 	public void init(){
-		configurationService.loadConfigurationFromFile();
+		configurationService.loadConfiguration();
 		
 		setAllConfiguredABTests(configurationService.getAllConfiguredABTests());
 		setAllActiveABTests(configurationService.getAllActiveABTests());
@@ -36,8 +38,10 @@ public class ABTestManager {
 	}
 	
 	public void flushConfiguration(){
-		configurationService.flushConfigurationToFile();
+		configurationService.flushConfiguration();
 	}
+	
+	
 	
 	
 	
@@ -54,7 +58,10 @@ public class ABTestManager {
 	
 	public boolean createABTest(String name, long id){return false;}
 	
-	public boolean createABTest(ABTest abtest){return false;}
+	public boolean createABTest(ABTest abtest){
+		configurationService.addABTest(abtest);
+		return false;
+	}
 	
 	public boolean removeABTest(ABTest abtest){return false;}
 	

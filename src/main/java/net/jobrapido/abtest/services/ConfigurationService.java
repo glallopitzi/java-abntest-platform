@@ -6,11 +6,10 @@ import net.jobrapido.abtest.entities.ABTest;
 
 public interface ConfigurationService {
 	public List<ABTest> getAllConfiguredABTests();
-	public List<ABTest> getAllConfiguredABTestsFromFile();
-	public List<ABTest> getAllConfiguredABTestsFromDB();
 	public List<ABTest> getAllActiveABTests();
-	public List<ABTest> getAllActiveABTestsFromFile();
-	public List<ABTest> getAllActiveABTestsFromDB();
+	public boolean flushConfiguration();
+	public boolean flushAndReloadConfiguration();
+	public boolean loadConfiguration();
 	
 	public boolean loadConfigurationFromFile();
 	public boolean flushConfigurationToFile();

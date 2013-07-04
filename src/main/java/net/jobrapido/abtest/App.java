@@ -1,5 +1,9 @@
 package net.jobrapido.abtest;
 
+import java.util.List;
+
+import net.jobrapido.abtest.entities.ABTest;
+
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -20,10 +24,24 @@ public class App {
 		
 		abTestManager.printCurrentConfiguration();
 		
+		List<ABTest> allConfiguredABTests = abTestManager.getAllConfiguredABTests();
+		
+		
+		
+		
 //		abTestManager.flushConfiguration();
 		
 		System.out.println( "Demo END" );
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

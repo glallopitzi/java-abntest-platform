@@ -7,7 +7,6 @@ import java.util.List;
 
 import net.jobrapido.abtest.entities.ABTest;
 import net.jobrapido.abtest.services.ConfigurationService;
-import net.jobrapido.abtest.services.HashingService;
 
 import org.apache.commons.io.FileUtils;
 
@@ -15,56 +14,43 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.inject.Inject;
 
 public class ConfigurationServiceDefault implements ConfigurationService {
 
-	
-	@Inject private HashingService hashingService;
 	
 	private final static String CONFIGURATION_FILENAME = "C:/abtestConfiguration";
 	
 	private List<ABTest> allConfiguredABTests;
 	
+	@Override
+	public boolean flushConfiguration() {
+		return flushConfigurationToFile();
+	}
+
+	@Override
+	public boolean flushAndReloadConfiguration() {
+		return flushConfiguration() && loadConfiguration();
+	}
+
+	@Override
+	public boolean loadConfiguration() {
+		return loadConfigurationFromFile();
+	}
 	
 	@Override
 	public List<ABTest> getAllConfiguredABTests() {
-		if ( allConfiguredABTests == null ) { loadConfigurationFromFile(); }
+		if ( allConfiguredABTests == null ) { loadConfiguration(); }
 		return this.allConfiguredABTests;
 	}
 
 	@Override
 	public List<ABTest> getAllActiveABTests() {
-		if ( allConfiguredABTests == null ) { loadConfigurationFromFile(); }
+		if ( allConfiguredABTests == null ) { loadConfiguration(); }
 		List<ABTest> allActiveABTests = new ArrayList<ABTest>();
 		for (ABTest abTest : this.allConfiguredABTests) {
 			if (abTest.isActive()) allActiveABTests.add(abTest);
 		}
 		return allActiveABTests;
-	}
-
-	@Override
-	public List<ABTest> getAllConfiguredABTestsFromFile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ABTest> getAllConfiguredABTestsFromDB() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ABTest> getAllActiveABTestsFromFile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ABTest> getAllActiveABTestsFromDB() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	
@@ -118,13 +104,14 @@ public class ConfigurationServiceDefault implements ConfigurationService {
 
 	@Override
 	public boolean addABTest(ABTest abtest) {
-		// TODO Auto-generated method stub
-		return false;
+		allConfiguredABTests.add(abtest);
+		
+		return true;
 	}
 
 	@Override
 	public boolean removeABTest(ABTest abtest) {
-		// TODO Auto-generated method stub
+		allConfiguredABTests.remove(abtest);
 		return false;
 	}
 
