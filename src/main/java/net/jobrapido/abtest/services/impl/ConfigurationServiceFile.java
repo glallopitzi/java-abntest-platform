@@ -3,10 +3,8 @@ package net.jobrapido.abtest.services.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import net.jobrapido.abtest.entities.ABTest;
-import net.jobrapido.abtest.services.ConfigurationService;
 
 import org.apache.commons.io.FileUtils;
 
@@ -15,12 +13,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-public class ConfigurationServiceFile implements ConfigurationService {
+public class ConfigurationServiceFile extends ConfigurationServiceBase {
 
 	
 	private final static String CONFIGURATION_FILENAME = "C:/abtestConfiguration";
 	
-	private List<ABTest> allConfiguredABTests;
 	
 	@Override
 	public boolean flushConfiguration() {
@@ -44,10 +41,7 @@ public class ConfigurationServiceFile implements ConfigurationService {
 		}
 	}
 
-	@Override
-	public boolean flushAndReloadConfiguration() {
-		return flushConfiguration() && loadConfiguration();
-	}
+	
 
 	@Override
 	public boolean loadConfiguration() {
@@ -73,62 +67,4 @@ public class ConfigurationServiceFile implements ConfigurationService {
 		}
 	}
 	
-	@Override
-	public List<ABTest> getAllConfiguredABTests() {
-		if ( allConfiguredABTests == null ) { loadConfiguration(); }
-		return this.allConfiguredABTests;
-	}
-
-	@Override
-	public List<ABTest> getAllActiveABTests() {
-		if ( allConfiguredABTests == null ) { loadConfiguration(); }
-		List<ABTest> allActiveABTests = new ArrayList<ABTest>();
-		for (ABTest abTest : this.allConfiguredABTests) {
-			if (abTest.isActive()) allActiveABTests.add(abTest);
-		}
-		return allActiveABTests;
-	}
-
-	@Override
-	public long getTotalActiveTestsWeight() {
-		long tot = 0;
-		List<ABTest> allActiveABTests = getAllActiveABTests();
-		for (ABTest abTest : allActiveABTests) {
-			tot += abTest.getTestWeight();
-		}
-		return tot;
-	}
-	
-
-	@Override
-	public boolean addABTest(ABTest abtest) {
-		if (allConfiguredABTests.add(abtest)){
-			return flushAndReloadConfiguration();
-		} 
-		return false;
-	}
-
-	@Override
-	public boolean removeABTest(ABTest abtest) {
-		if (allConfiguredABTests.remove(abtest)){
-			return flushAndReloadConfiguration();
-		} 
-		return false;
-	}
-
-	@Override
-	public boolean updateABTest(ABTest abtest) {
-		int index = allConfiguredABTests.indexOf(abtest);
-		if ( index >= 0){
-			if (allConfiguredABTests.set( index, abtest ) != null){
-				return flushAndReloadConfiguration();
-			}
-		}
-		return false;
-	}
-
-	public void setAllConfiguredABTests(List<ABTest> allConfiguredABTests) {
-		this.allConfiguredABTests = allConfiguredABTests;
-	}
-
 }
