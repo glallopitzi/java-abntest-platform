@@ -1,10 +1,8 @@
 package net.jobrapido.abtest;
 
 import java.util.Date;
-import java.util.List;
 
 import net.jobrapido.abtest.entities.ABTest;
-import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.entities.ABTestUser;
 
 import com.google.inject.Guice;
@@ -21,24 +19,28 @@ public class App {
 	
 	
 	public void run(){
-		System.out.println( "------------ Demo begin.." );
+		System.out.println( "------------ Demo BEGIN.." );
 		
 		// call this at very beginning of your app
 		abTestManager.init();
 		
-		createSomeABTest("link to inbox five");
+//		createSomeABTest("link to inbox one");
+//		createSomeABTest("link to inbox two");
+//		createSomeABTest("mailto light one");
+//		createSomeABTest("mailto light two");
+//		createSomeABTest("subscription div one");
+		
 		
 //		modifySomeABTest("change me");
-		
 //		evaluateSomeUser("giancarlolallopizzi@gmail.com");
-		
 //		evaluateSomeUser("giancarlo.lallopizzi@jobrapido.com");
-//		
-//		evaluateSomeUser("123322432");
-//		evaluateSomeUser("123322433");
-//		evaluateSomeUser("123322434");
 		
-		abTestManager.printCurrentConfiguration();
+		for(long userid = 0; userid < 1000; userid++){
+			evaluateSomeUser(String.valueOf(userid));
+		}
+		
+		
+//		abTestManager.printCurrentConfiguration();
 		
 		System.out.println( "------------ Demo END" );
 	}
@@ -50,10 +52,14 @@ public class App {
 	
 	private void evaluateSomeUser(String userId) {
 		ABTestUser dummyABTestUser = abTestManager.createDummyABTestUser( userId );
+//		System.out.println("dummyABTestUser.toDouble(): " + dummyABTestUser.toDouble());
+//		System.out.println("dummyABTestUser.toLong(): " + dummyABTestUser.toLong());
+		
 		ABTest abTestForUser = abTestManager.getABTestForUser( dummyABTestUser );
 		if ( abTestForUser != null ){
-			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
-			System.out.println( abTestClusterForUserAndABTest.toString() );
+			System.out.println("user " + dummyABTestUser.getUserId() + " assigned to test " + abTestForUser.getName());
+//			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
+//			System.out.println( abTestClusterForUserAndABTest.toString() );
 			
 		} else {
 			System.out.println("the user \"" + userId + "\" is not assigned to any test");

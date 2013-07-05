@@ -25,7 +25,7 @@ public class HashingServiceMD5 implements HashingService {
 		String result = "";
 		
 		try {
-			byte[] bytesOfMessage = clearName.getBytes("UTF-8");
+			byte[] bytesOfMessage = clearName.getBytes("UTF-16");
 			byte[] thedigest = getMd().digest(bytesOfMessage);
 			
 			StringBuffer sb = new StringBuffer();

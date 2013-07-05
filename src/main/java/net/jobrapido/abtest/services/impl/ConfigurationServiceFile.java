@@ -47,15 +47,16 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 	public boolean loadConfiguration() {
 		File configFile = new File(CONFIGURATION_FILENAME);
 		try {
+			ArrayList<ABTest> abtests = new ArrayList<ABTest>();
 			Gson gson = new Gson();
 			JsonParser parser = new JsonParser();
-			
 			String configString = FileUtils.readFileToString(configFile);
-			JsonArray array = parser.parse(configString).getAsJsonArray();
-			ArrayList<ABTest> abtests = new ArrayList<ABTest>();
-			for(JsonElement obj : array){
-				ABTest elem = gson.fromJson(obj, ABTest.class);
-				abtests.add(elem);
+			if ( ! "".equals(configString) ){
+				JsonArray array = parser.parse(configString).getAsJsonArray();
+				for(JsonElement obj : array){
+					ABTest elem = gson.fromJson(obj, ABTest.class);
+					abtests.add(elem);
+				}
 			}
 			setAllConfiguredABTests(abtests);
 			
