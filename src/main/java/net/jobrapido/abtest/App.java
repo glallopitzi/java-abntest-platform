@@ -2,11 +2,11 @@ package net.jobrapido.abtest;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.jobrapido.abtest.entities.ABTest;
 import net.jobrapido.abtest.entities.ABTestUser;
+import net.jobrapido.abtest.services.RandomizationService;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -19,7 +19,7 @@ import com.google.inject.Injector;
 public class App {
 	
 	@Inject private ABTestManager abTestManager;
-	
+	@Inject private RandomizationService randomizationService;
 	
 	public void run(){
 		System.out.println( "------------ Demo BEGIN.." );
@@ -48,9 +48,17 @@ public class App {
 	
 	private void evaluateSomeUsers() {
 		Map<String, Integer> result = new HashMap<String, Integer>();
-		
-		for(long userid = 0; userid < 1000000; userid++){
-			ABTest abTestForUser = evaluateSomeUser(String.valueOf(userid));
+		for( long counter = 1; counter < 1000000; counter++ ){
+			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
+			String randomString = randomizationService.getRandomString();
+			boolean randomBoolean = randomizationService.getRandomBoolean();
+			
+			String userId = randomBoolean ? String.valueOf(randomLong) : randomString;
+			
+//			System.out.println(userId);
+			
+			
+			ABTest abTestForUser = evaluateSomeUser( String.valueOf( userId ) );
 			if (abTestForUser != null){
 				if (result.containsKey(abTestForUser.getHashKey())){
 					Integer count = result.get(abTestForUser.getHashKey());
