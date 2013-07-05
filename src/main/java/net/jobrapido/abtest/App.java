@@ -1,6 +1,9 @@
 package net.jobrapido.abtest;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.jobrapido.abtest.entities.ABTest;
 import net.jobrapido.abtest.entities.ABTestUser;
@@ -24,21 +27,14 @@ public class App {
 		// call this at very beginning of your app
 		abTestManager.init();
 		
-//		createSomeABTest("link to inbox one");
-//		createSomeABTest("link to inbox two");
-//		createSomeABTest("mailto light one");
-//		createSomeABTest("mailto light two");
-//		createSomeABTest("subscription div one");
+//		createSomeABTests();
 		
+		evaluateSomeUsers();
 		
 //		modifySomeABTest("change me");
 //		evaluateSomeUser("giancarlolallopizzi@gmail.com");
 //		evaluateSomeUser("giancarlo.lallopizzi@jobrapido.com");
-		
-		for(long userid = 0; userid < 1000; userid++){
-			evaluateSomeUser(String.valueOf(userid));
-		}
-		
+
 		
 //		abTestManager.printCurrentConfiguration();
 		
@@ -50,19 +46,51 @@ public class App {
 	
 	
 	
-	private void evaluateSomeUser(String userId) {
+	private void evaluateSomeUsers() {
+		Map<String, Integer> result = new HashMap<String, Integer>();
+		
+		for(long userid = 0; userid < 1000000; userid++){
+			ABTest abTestForUser = evaluateSomeUser(String.valueOf(userid));
+			if (abTestForUser != null){
+				if (result.containsKey(abTestForUser.getHashKey())){
+					Integer count = result.get(abTestForUser.getHashKey());
+					result.put(abTestForUser.getHashKey(), count + 1);
+				}else{
+					result.put(abTestForUser.getHashKey(), 1);
+				}
+			}
+		}
+		
+		for (String item : result.keySet()) {
+			System.out.println(item + ": " + result.get(item));
+		}
+		
+	}
+
+	private void createSomeABTests() {
+		String[] abTestNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two"};
+		for (String string : abTestNames) {
+			createSomeABTest(string);	
+		}
+	}
+
+	private ABTest evaluateSomeUser(String userId) {
 		ABTestUser dummyABTestUser = abTestManager.createDummyABTestUser( userId );
 //		System.out.println("dummyABTestUser.toDouble(): " + dummyABTestUser.toDouble());
 //		System.out.println("dummyABTestUser.toLong(): " + dummyABTestUser.toLong());
-		
+		Map<String, Integer> result = new HashMap<String, Integer>();
 		ABTest abTestForUser = abTestManager.getABTestForUser( dummyABTestUser );
 		if ( abTestForUser != null ){
-			System.out.println("user " + dummyABTestUser.getUserId() + " assigned to test " + abTestForUser.getName());
+//			System.out.println("user " + dummyABTestUser.getUserId() + " assigned to test " + abTestForUser.getName());
+			
+			return abTestForUser;
+			
 //			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
 //			System.out.println( abTestClusterForUserAndABTest.toString() );
 			
 		} else {
 			System.out.println("the user \"" + userId + "\" is not assigned to any test");
+			return null;
 		}
 	}
 	

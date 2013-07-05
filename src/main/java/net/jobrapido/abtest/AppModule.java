@@ -9,6 +9,7 @@ import net.jobrapido.abtest.services.UserAssignmentService;
 import net.jobrapido.abtest.services.impl.ConfigurationServiceFile;
 import net.jobrapido.abtest.services.impl.DataPathServiceDefault;
 import net.jobrapido.abtest.services.impl.HashingServiceMD5;
+import net.jobrapido.abtest.services.impl.HashingServiceMD5Custom;
 import net.jobrapido.abtest.services.impl.RandomizationServiceHashAndPartition;
 import net.jobrapido.abtest.services.impl.StatisticalServiceTTest;
 import net.jobrapido.abtest.services.impl.UserAssignmentServiceDefault;
@@ -25,7 +26,7 @@ public class AppModule extends AbstractModule {
 		bind(DataPathService.class).to(DataPathServiceDefault.class);
 		bind(StatisticalService.class).to(StatisticalServiceTTest.class);
 		bind(ConfigurationService.class).to(ConfigurationServiceFile.class).in(Singleton.class);
-		bind(HashingService.class).to(HashingServiceMD5.class);
+		bind(HashingService.class).to(HashingServiceMD5Custom.class);
 	}
 	
 	

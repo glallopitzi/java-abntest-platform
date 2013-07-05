@@ -25,7 +25,7 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 		long aux = 0;
 		for (ABTest abTest : allActiveABTests) {
 			long nextAux = aux + abTest.getTestWeight();
-			if((aux <= res) && (res <= nextAux)) return abTest;
+			if((aux <= res) && (res < nextAux)) return abTest;
 			aux = nextAux;
 		}
 		return null;
