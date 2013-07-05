@@ -50,10 +50,11 @@ public class App {
 		Map<String, Integer> result = new HashMap<String, Integer>();
 		for( long counter = 1; counter < 1000000; counter++ ){
 			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
-			String randomString = randomizationService.getRandomString();
+//			String randomString = randomizationService.getRandomString();
 			boolean randomBoolean = randomizationService.getRandomBoolean();
+			String randomEmail = randomizationService.getRandomEmailAddress();
 			
-			String userId = randomBoolean ? String.valueOf(randomLong) : randomString;
+			String userId = randomBoolean ? String.valueOf(randomLong) : randomEmail;
 			
 //			System.out.println(userId);
 			
