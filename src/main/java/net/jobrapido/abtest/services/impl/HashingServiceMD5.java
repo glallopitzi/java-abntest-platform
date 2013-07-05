@@ -1,7 +1,5 @@
 package net.jobrapido.abtest.services.impl;
 
-import java.io.UnsupportedEncodingException;
-
 import net.jobrapido.abtest.services.HashingServiceBase;
 
 public class HashingServiceMD5 extends HashingServiceBase {
@@ -11,26 +9,29 @@ public class HashingServiceMD5 extends HashingServiceBase {
 		
 		if ( ! initializeMessageDigest() ) return "";
 		
-		String result = "";
+		byte[] bytesOfMessage = getBytesArrayFromString(toBeHashed);
+		if ( bytesOfMessage == null ) return "";
 		
-		try {
-			byte[] bytesOfMessage = toBeHashed.getBytes("UTF-16");
-			byte[] thedigest = getMd().digest(bytesOfMessage);
-			
-			StringBuffer sb = new StringBuffer();
-			for (byte b : thedigest) {
-				sb.append(Integer.toHexString((int) (b & 0xff)));
-			}
-			System.out.println(sb.toString());
-			result = sb.toString();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			System.out.println("some error occurred during MD5 of " + toBeHashed);
-			return "";
+		byte[] thedigest = getMd().digest(bytesOfMessage);
+		
+		StringBuffer sb = new StringBuffer();
+		for (byte b : thedigest) {
+			sb.append(Integer.toHexString((int) (b & 0xff)));
 		}
 		
-		return result;
+		return sb.toString();
 	}
-	
+
+	@Override
+	public String makeXORBetween(String a, String b) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] makeXORBetween(byte[] a, byte[] b) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
