@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.jobrapido.abtest.entities.ABTest;
+import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.services.ConfigurationService;
 
 public abstract class ConfigurationServiceBase implements ConfigurationService {
@@ -26,6 +27,17 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 		return allActiveABTests;
 	}
 
+	
+	@Override
+	public long getTotalTestClustersWeight(ABTest abTest) {
+		long tot = 0;
+		List<ABTestCluster> allABTestClusters = abTest.getClusters();
+		for (ABTestCluster abTestCluster : allABTestClusters) {
+			tot += abTestCluster.getWeight();
+		}
+		return tot;
+	}
+	
 	@Override
 	public long getTotalActiveTestsWeight() {
 		long tot = 0;
@@ -35,6 +47,9 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 		}
 		return tot;
 	}
+	
+	
+	
 
 	@Override
 	public abstract boolean flushConfiguration();

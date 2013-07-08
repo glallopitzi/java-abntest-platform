@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.jobrapido.abtest.entities.ABTest;
+import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.entities.ABTestUser;
 import net.jobrapido.abtest.services.RandomizationService;
 
@@ -47,7 +48,7 @@ public class App {
 	
 	
 	private void evaluateSomeUsers() {
-		Map<String, Integer> result = new HashMap<String, Integer>();
+		Map<ABTest, Integer> result = new HashMap<ABTest, Integer>();
 		for( long counter = 1; counter < 1000000; counter++ ){
 			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
 //			String randomString = randomizationService.getRandomString();
@@ -61,16 +62,16 @@ public class App {
 			
 			ABTest abTestForUser = evaluateSomeUser( String.valueOf( userId ) );
 			if (abTestForUser != null){
-				if (result.containsKey(abTestForUser.getHashKey())){
-					Integer count = result.get(abTestForUser.getHashKey());
-					result.put(abTestForUser.getHashKey(), count + 1);
+				if (result.containsKey(abTestForUser)){
+					Integer count = result.get(abTestForUser);
+					result.put(abTestForUser, count + 1);
 				}else{
-					result.put(abTestForUser.getHashKey(), 1);
+					result.put(abTestForUser, 1);
 				}
 			}
 		}
 		
-		for (String item : result.keySet()) {
+		for (ABTest item : result.keySet()) {
 			System.out.println(item + ": " + result.get(item));
 		}
 		
@@ -87,15 +88,15 @@ public class App {
 		ABTestUser dummyABTestUser = abTestManager.createDummyABTestUser( userId );
 //		System.out.println("dummyABTestUser.toDouble(): " + dummyABTestUser.toDouble());
 //		System.out.println("dummyABTestUser.toLong(): " + dummyABTestUser.toLong());
-		Map<String, Integer> result = new HashMap<String, Integer>();
+		
 		ABTest abTestForUser = abTestManager.getABTestForUser( dummyABTestUser );
 		if ( abTestForUser != null ){
-//			System.out.println("user " + dummyABTestUser.getUserId() + " assigned to test " + abTestForUser.getName());
+//			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
+//			System.out.println( abTestClusterForUserAndABTest.toString() );
 			
 			return abTestForUser;
 			
-//			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
-//			System.out.println( abTestClusterForUserAndABTest.toString() );
+
 			
 		} else {
 			System.out.println("the user \"" + userId + "\" is not assigned to any test");

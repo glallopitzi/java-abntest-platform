@@ -17,14 +17,30 @@ public class HashingServiceMD5Custom extends HashingServiceBase {
 
 	@Override
 	public String makeXORBetween(String a, String b) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(a.length() != b.length()) return null;
+		
+		byte[] cBytes = makeXORBetween(getBytesArrayFromString(a), getBytesArrayFromString(b));
+		
+		String c = getStringFromBytesArray(cBytes);
+		
+		return c;
 	}
 
 	@Override
 	public byte[] makeXORBetween(byte[] a, byte[] b) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(a.length != b.length) return null;
+		
+		byte[] c = new byte[a.length]; 
+		
+		for(int i = 0; i < a.length; i++){
+			c[i] = (byte) (a[i] ^ b[i]);
+		}
+		
+		return c;
 	}
+
+	
 
 }

@@ -1,8 +1,12 @@
 package net.jobrapido.abtest.services;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 
 public abstract class HashingServiceBase implements HashingService {
 
@@ -17,6 +21,18 @@ public abstract class HashingServiceBase implements HashingService {
 	@Override
 	public abstract byte[] makeXORBetween(byte[] a, byte[] b);
 	
+	
+	
+	@Override
+	public long getLongFromString(String hashKey) {
+		byte[] bytes = null;
+		try {
+			bytes = Hex.decodeHex(hashKey.toCharArray());
+		} catch (DecoderException e) {
+			e.printStackTrace();
+		}
+		return ByteBuffer.wrap(bytes).getLong();
+	}
 	
 	
 	
@@ -56,6 +72,7 @@ public abstract class HashingServiceBase implements HashingService {
 
             hexString.append(hex);
         }
+                
         return hexString.toString();
 	}
 	

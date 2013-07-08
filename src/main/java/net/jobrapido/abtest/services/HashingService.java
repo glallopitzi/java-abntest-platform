@@ -8,4 +8,6 @@ public interface HashingService {
 	
 	public byte[] makeXORBetween(byte[] a, byte[] b);
 	
+	public long getLongFromString(String hashKey);
+	
 }

@@ -7,7 +7,9 @@ import net.jobrapido.abtest.entities.ABTest;
 public interface ConfigurationService {
 	public List<ABTest> getAllConfiguredABTests();
 	public List<ABTest> getAllActiveABTests();
+	
 	public long getTotalActiveTestsWeight();
+	public long getTotalTestClustersWeight(ABTest abTest);
 	
 	public boolean flushConfiguration();
 	public boolean flushAndReloadConfiguration();

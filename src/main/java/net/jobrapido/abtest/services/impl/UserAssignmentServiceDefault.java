@@ -6,6 +6,7 @@ import net.jobrapido.abtest.entities.ABTest;
 import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.entities.ABTestUser;
 import net.jobrapido.abtest.services.ConfigurationService;
+import net.jobrapido.abtest.services.HashingService;
 import net.jobrapido.abtest.services.RandomizationService;
 import net.jobrapido.abtest.services.UserAssignmentService;
 
@@ -15,12 +16,13 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 
 	@Inject private ConfigurationService configurationService;
 	@Inject private RandomizationService randomizationService;
+	@Inject private HashingService hashingService;
 	
 	@Override
 	public ABTest getABTestForUser(ABTestUser abTestUser) {
 		List<ABTest> allActiveABTests = configurationService.getAllActiveABTests();
 		long totalActiveTestsWeight = configurationService.getTotalActiveTestsWeight();
-		long abTestUserLong = Math.abs(abTestUser.toLong());
+		long abTestUserLong = Math.abs(hashingService.getLongFromString(abTestUser.getHashKey()));
 		long res =  abTestUserLong % totalActiveTestsWeight; 
 		long aux = 0;
 		for (ABTest abTest : allActiveABTests) {
@@ -34,8 +36,10 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 	@Override
 	public ABTestCluster getABTestClusterForUserAndABTest(ABTest abTest,
 			ABTestUser abTestUser) {
-		
 		List<ABTestCluster> abTestClusters = abTest.getClusters();
+		long totalClusterWeight = configurationService.getTotalTestClustersWeight(abTest);
+		String combinedHash = hashingService.makeXORBetween(abTestUser.getHashKey(), abTest.getHashKey());
+		// TODO
 		
 		return null;
 	}
