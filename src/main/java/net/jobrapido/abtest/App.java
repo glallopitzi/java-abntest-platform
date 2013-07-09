@@ -9,6 +9,7 @@ import java.util.Map;
 import net.jobrapido.abtest.entities.ABTest;
 import net.jobrapido.abtest.entities.ABTestCluster;
 import net.jobrapido.abtest.entities.ABTestUser;
+import net.jobrapido.abtest.services.HashingService;
 import net.jobrapido.abtest.services.RandomizationService;
 
 import com.google.inject.Guice;
@@ -63,10 +64,10 @@ public class App {
 				
 		for (ABTest item : result.keySet()) {
 			System.out.println(item + ": " + result.get(item));
-		}
-		
-		for (ABTestCluster item : clusterResult.keySet()){
-			System.out.println(item + ": " + clusterResult.get(item));
+			List<ABTestCluster> clusters = item.getClusters();
+			for (ABTestCluster abTestCluster : clusters) {
+				System.out.println(abTestCluster + ": " + clusterResult.get(abTestCluster));
+			}
 		}
 		
 	}
@@ -75,7 +76,7 @@ public class App {
 
 		List<String> randomeUserIds = new ArrayList<String>();
 		
-		for( long counter = 1; counter < 1000000; counter++ ){
+		for( long counter = 1; counter < 100; counter++ ){
 			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
 //			String randomString = randomizationService.getRandomString();
 			String randomEmail = randomizationService.getRandomEmailAddress();
@@ -97,8 +98,7 @@ public class App {
 
 
 	private void createSomeABTests() {
-		String[] abTestNames = {"link to inbox one"};
-//		String[] abTestNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two"};
+		String[] abTestNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two"};
 		for (String string : abTestNames) {
 			createSomeABTest(string);	
 		}
@@ -143,7 +143,7 @@ public class App {
 
 	private void createSomeABTest(String name) {
 		
-		ABTest createDummyABTest = randomizationService.getRandomBoolean() ? abTestManager.createDummyABTestRandom(name, new Date().getTime()) : abTestManager.createDummyABTest50(name, new Date().getTime());
+		ABTest createDummyABTest = randomizationService.getRandomBoolean() ? abTestManager.createDummyABTestRandom(name, randomizationService.getRandomLong()) : abTestManager.createDummyABTest50(name, randomizationService.getRandomLong());
 		
 		abTestManager.createABTest(createDummyABTest);
 		abTestManager.enableABTest(createDummyABTest);

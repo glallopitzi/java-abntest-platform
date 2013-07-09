@@ -1,38 +1,27 @@
 package net.jobrapido.abtest.services.impl;
 
-import net.jobrapido.abtest.services.HashingServiceBase;
+import java.math.BigInteger;
 
-public class HashingServiceMD5 extends HashingServiceBase {
+import net.jobrapido.abtest.services.HashingService;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
+public class HashingServiceMD5 implements HashingService {
 
 	@Override
 	public String getHashOfGivenString(String toBeHashed) {
-		
-		if ( ! initializeMessageDigest() ) return "";
-		
-		byte[] bytesOfMessage = getBytesArrayFromString(toBeHashed);
-		if ( bytesOfMessage == null ) return "";
-		
-		byte[] thedigest = getMd().digest(bytesOfMessage);
-		
-		StringBuffer sb = new StringBuffer();
-		for (byte b : thedigest) {
-			sb.append(Integer.toHexString((int) (b & 0xff)));
-		}
-		
-		return sb.toString();
+		return DigestUtils.md5Hex(toBeHashed);
 	}
 
 	@Override
-	public String makeXORBetween(String a, String b) {
-		// TODO Auto-generated method stub
-		return null;
+	public BigInteger toBigInteger(String hashKey){
+		return new BigInteger(DigestUtils.md5(hashKey));
 	}
 
 	@Override
-	public byte[] makeXORBetween(byte[] a, byte[] b) {
-		// TODO Auto-generated method stub
-		return null;
+	public String fromBigInteger(BigInteger hashKey){
+		return DigestUtils.md5Hex(hashKey.toByteArray());
 	}
-
 	
+
 }

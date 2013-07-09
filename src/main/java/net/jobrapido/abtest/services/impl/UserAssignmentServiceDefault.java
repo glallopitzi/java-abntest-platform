@@ -23,7 +23,7 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 	public ABTest getABTestForUser(ABTestUser abTestUser) {
 		List<ABTest> allActiveABTests = configurationService.getAllActiveABTests();
 		long totalActiveTestsWeight = configurationService.getTotalActiveTestsWeight();
-		long abTestUserLong = Math.abs(hashingService.getLongFromString(abTestUser.getHashKey()));
+		long abTestUserLong = Math.abs(hashingService.toBigInteger(abTestUser.getHashKey()).longValue());
 		long res =  abTestUserLong % totalActiveTestsWeight; 
 		long aux = 0;
 		for (ABTest abTest : allActiveABTests) {
