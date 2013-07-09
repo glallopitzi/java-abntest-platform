@@ -25,6 +25,7 @@ public class App {
 	@Inject private RandomizationService randomizationService;
 		
 	private Map<ABTest, Integer> result = new HashMap<ABTest, Integer>();
+	private Map<ABTestCluster, Integer> clusterResult = new HashMap<ABTestCluster, Integer>();
 	
 	public void run(){
 		System.out.println( "------------ Demo BEGIN.." );
@@ -64,6 +65,10 @@ public class App {
 			System.out.println(item + ": " + result.get(item));
 		}
 		
+		for (ABTestCluster item : clusterResult.keySet()){
+			System.out.println(item + ": " + clusterResult.get(item));
+		}
+		
 	}
 
 	private List<String> generateRandomUserIds() {
@@ -92,7 +97,8 @@ public class App {
 
 
 	private void createSomeABTests() {
-		String[] abTestNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two"};
+		String[] abTestNames = {"link to inbox one"};
+//		String[] abTestNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two"};
 		for (String string : abTestNames) {
 			createSomeABTest(string);	
 		}
@@ -113,7 +119,13 @@ public class App {
 			
 			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
 			if ( abTestClusterForUserAndABTest != null ){
-				System.out.println( abTestClusterForUserAndABTest.toString() );
+//				System.out.println( abTestClusterForUserAndABTest.toString() );
+				if (clusterResult.containsKey(abTestClusterForUserAndABTest)){
+					Integer count = clusterResult.get(abTestClusterForUserAndABTest);
+					clusterResult.put(abTestClusterForUserAndABTest, count + 1);
+				}else{
+					clusterResult.put(abTestClusterForUserAndABTest, 1);
+				}
 				
 			}
 						

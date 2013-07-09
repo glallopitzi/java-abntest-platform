@@ -31,8 +31,13 @@ public class ABTestCluster {
 
 	
 	@Override
+	public boolean equals(Object obj) {
+		return ( this.getAbTestHashKey().equals(((ABTestCluster)obj).getAbTestHashKey()) && this.getId() == ((ABTestCluster)obj).getId() );
+	}
+	
+	@Override
 	public String toString() {
-		return "cluster[id("+getId()+"), weigth("+getWeight()+")]";
+		return "cluster[id("+getId()+"), weigth("+getWeight()+"), abTestHashKey("+getAbTestHashKey()+")]";
 	}
 	
 

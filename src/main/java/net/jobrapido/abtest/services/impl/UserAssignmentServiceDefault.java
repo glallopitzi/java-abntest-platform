@@ -1,5 +1,6 @@
 package net.jobrapido.abtest.services.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import net.jobrapido.abtest.entities.ABTest;
@@ -38,9 +39,19 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 			ABTestUser abTestUser) {
 		List<ABTestCluster> abTestClusters = abTest.getClusters();
 		long totalClusterWeight = configurationService.getTotalTestClustersWeight(abTest);
-		String combinedHash = hashingService.makeXORBetween(abTestUser.getHashKey(), abTest.getHashKey());
-		// TODO
+		BigInteger abTestBigInteger = hashingService.toBigInteger(abTest.getHashKey());
+		BigInteger abTestUserBigInteger = hashingService.toBigInteger(abTestUser.getHashKey());
+		BigInteger result = abTestBigInteger.xor(abTestUserBigInteger).abs();
 		
+		
+		long res = Math.abs(result.longValue()) % totalClusterWeight;
+		
+		long aux = 0;
+		for (ABTestCluster abTestCluster : abTestClusters) {
+			long nextAux = aux + abTestCluster.getWeight();
+			if((aux <= res) && (res < nextAux)) return abTestCluster;
+			aux = nextAux;
+		}
 		return null;
 	}
 
