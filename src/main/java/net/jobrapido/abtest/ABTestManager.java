@@ -73,7 +73,7 @@ public class ABTestManager {
 	
 	
 	/*
-	 * User related methods (test/cluster assignment, get active test for user, etc..)
+	 * User related methods (test/cluster assignment, get active test for user, force assignment, etc..)
 	 * 
 	 */
 	
@@ -92,8 +92,13 @@ public class ABTestManager {
 		return assignmentService.getABTestClusterForUserAndABTest(abTest, abtestUser);
 	}
 	
+	public void forceABTestForUser(ABTest abTest){
+		// TODO
+	}
 	
-	
+	public void forceABTestClusterForUser(ABTest abTest, ABTestCluster abTestCluster){
+		// TODO
+	}
 	
 	
 	
@@ -110,15 +115,40 @@ public class ABTestManager {
 	 * 
 	 */
 	
-	public ABTest createDummyABTest(String name, long id) {
-    	ABTest abTest = null;
-  		List<ABTestCluster> abTestClustersFiftyFifty = new ArrayList<ABTestCluster>();
-  		abTestClustersFiftyFifty.add(new ABTestCluster(1l, 1l));
-  		abTestClustersFiftyFifty.add(new ABTestCluster(2l, 1l));
-  		abTest = new ABTest( name, id );
+	public ABTest createDummyABTest50(String name, long id) {
+  		ABTest abTest = new ABTest( name, id );
 	    abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
+	    List<ABTestCluster> abTestClustersFiftyFifty = getFiftyFiftyClusterList(abTest);
 	    abTest.setClusters(abTestClustersFiftyFifty);
 		return abTest;
+	}
+	
+	public ABTest createDummyABTestRandom(String name, long id) {
+  		ABTest abTest = new ABTest( name, id );
+  		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
+  		List<ABTestCluster> abTestClustersFiftyFifty = getRandomClusterList(abTest);
+	    abTest.setClusters(abTestClustersFiftyFifty);
+		return abTest;
+	}
+	
+	
+	public List<ABTestCluster> getFiftyFiftyClusterList(ABTest abTest){
+		List<ABTestCluster> abTestClustersFiftyFifty = new ArrayList<ABTestCluster>();
+  		abTestClustersFiftyFifty.add(new ABTestCluster(1l, 1l, abTest.getHashKey()));
+  		abTestClustersFiftyFifty.add(new ABTestCluster(2l, 1l, abTest.getHashKey()));
+  		return abTestClustersFiftyFifty;
+	}
+	
+	public List<ABTestCluster> getRandomClusterList(ABTest abTest){
+		List<ABTestCluster> abTestClustersFiftyFifty = new ArrayList<ABTestCluster>();
+		
+		// TODO make random cluster list here
+		abTestClustersFiftyFifty.add(new ABTestCluster(1l, 1l, abTest.getHashKey()));
+  		abTestClustersFiftyFifty.add(new ABTestCluster(2l, 2l, abTest.getHashKey()));
+  		abTestClustersFiftyFifty.add(new ABTestCluster(3l, 3l, abTest.getHashKey()));
+  		abTestClustersFiftyFifty.add(new ABTestCluster(4l, 3l, abTest.getHashKey()));
+  		
+  		return abTestClustersFiftyFifty;
 	}
 	
 	public ABTestUser createDummyABTestUser(String name){

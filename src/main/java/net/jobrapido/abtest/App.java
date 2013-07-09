@@ -1,7 +1,9 @@
 package net.jobrapido.abtest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.jobrapido.abtest.entities.ABTest;
@@ -21,6 +23,8 @@ public class App {
 	
 	@Inject private ABTestManager abTestManager;
 	@Inject private RandomizationService randomizationService;
+		
+	private Map<ABTest, Integer> result = new HashMap<ABTest, Integer>();
 	
 	public void run(){
 		System.out.println( "------------ Demo BEGIN.." );
@@ -33,6 +37,7 @@ public class App {
 		evaluateSomeUsers();
 		
 //		modifySomeABTest("change me");
+		
 //		evaluateSomeUser("giancarlolallopizzi@gmail.com");
 //		evaluateSomeUser("giancarlo.lallopizzi@jobrapido.com");
 
@@ -48,34 +53,43 @@ public class App {
 	
 	
 	private void evaluateSomeUsers() {
-		Map<ABTest, Integer> result = new HashMap<ABTest, Integer>();
-		for( long counter = 1; counter < 1000000; counter++ ){
-			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
-//			String randomString = randomizationService.getRandomString();
-			boolean randomBoolean = randomizationService.getRandomBoolean();
-			String randomEmail = randomizationService.getRandomEmailAddress();
-			
-			String userId = randomBoolean ? String.valueOf(randomLong) : randomEmail;
-			
-//			System.out.println(userId);
-			
-			
-			ABTest abTestForUser = evaluateSomeUser( String.valueOf( userId ) );
-			if (abTestForUser != null){
-				if (result.containsKey(abTestForUser)){
-					Integer count = result.get(abTestForUser);
-					result.put(abTestForUser, count + 1);
-				}else{
-					result.put(abTestForUser, 1);
-				}
-			}
-		}
 		
+		List<String> randomUserIds = generateRandomUserIds();
+		
+		for (String userId : randomUserIds) {
+			evaluateSomeUser( String.valueOf( userId ) );
+		}
+				
 		for (ABTest item : result.keySet()) {
 			System.out.println(item + ": " + result.get(item));
 		}
 		
 	}
+
+	private List<String> generateRandomUserIds() {
+
+		List<String> randomeUserIds = new ArrayList<String>();
+		
+		for( long counter = 1; counter < 1000000; counter++ ){
+			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
+//			String randomString = randomizationService.getRandomString();
+			String randomEmail = randomizationService.getRandomEmailAddress();
+			
+			String userId = randomizationService.getRandomBoolean() ? String.valueOf(randomLong) : randomEmail;
+			
+//			System.out.println(userId);
+			
+			randomeUserIds.add(userId);
+			
+		}
+		
+		return randomeUserIds;
+	}
+
+
+
+
+
 
 	private void createSomeABTests() {
 		String[] abTestNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two"};
@@ -84,23 +98,27 @@ public class App {
 		}
 	}
 
-	private ABTest evaluateSomeUser(String userId) {
+	private void evaluateSomeUser(String userId) {
 		ABTestUser dummyABTestUser = abTestManager.createDummyABTestUser( userId );
-//		System.out.println("dummyABTestUser.toDouble(): " + dummyABTestUser.toDouble());
-//		System.out.println("dummyABTestUser.toLong(): " + dummyABTestUser.toLong());
 		
 		ABTest abTestForUser = abTestManager.getABTestForUser( dummyABTestUser );
 		if ( abTestForUser != null ){
-//			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
-//			System.out.println( abTestClusterForUserAndABTest.toString() );
+			if (result.containsKey(abTestForUser)){
+				Integer count = result.get(abTestForUser);
+				result.put(abTestForUser, count + 1);
+			}else{
+				result.put(abTestForUser, 1);
+			}
+		
 			
-			return abTestForUser;
-			
-
-			
+			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
+			if ( abTestClusterForUserAndABTest != null ){
+				System.out.println( abTestClusterForUserAndABTest.toString() );
+				
+			}
+						
 		} else {
 			System.out.println("the user \"" + userId + "\" is not assigned to any test");
-			return null;
 		}
 	}
 	
@@ -112,7 +130,9 @@ public class App {
 	}
 
 	private void createSomeABTest(String name) {
-		ABTest createDummyABTest = abTestManager.createDummyABTest(name, new Date().getTime());
+		
+		ABTest createDummyABTest = randomizationService.getRandomBoolean() ? abTestManager.createDummyABTestRandom(name, new Date().getTime()) : abTestManager.createDummyABTest50(name, new Date().getTime());
+		
 		abTestManager.createABTest(createDummyABTest);
 		abTestManager.enableABTest(createDummyABTest);
 		abTestManager.printCurrentConfiguration();

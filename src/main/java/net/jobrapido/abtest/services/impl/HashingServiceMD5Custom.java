@@ -1,18 +1,14 @@
 package net.jobrapido.abtest.services.impl;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import net.jobrapido.abtest.services.HashingServiceBase;
 
 public class HashingServiceMD5Custom extends HashingServiceBase {
 
 	@Override
 	public String getHashOfGivenString(String toBeHashed) {
-		if ( ! initializeMessageDigest() ) return "";
-		
-		byte[] bytesOfMessage = getBytesArrayFromString(toBeHashed);
-		if ( bytesOfMessage == null ) return "";
-		
-		byte messageDigest[] = getMd().digest(bytesOfMessage);
-		return getStringFromBytesArray(messageDigest);
+		return DigestUtils.md5Hex(toBeHashed);
 	}
 
 	@Override

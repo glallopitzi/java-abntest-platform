@@ -1,12 +1,14 @@
 package net.jobrapido.abtest.services;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 
 public abstract class HashingServiceBase implements HashingService {
 
@@ -76,8 +78,15 @@ public abstract class HashingServiceBase implements HashingService {
         return hexString.toString();
 	}
 	
-	
-	
+	@Override
+	public BigInteger toBigInteger(String hashKey){
+		return new BigInteger(DigestUtils.md5(hashKey));
+	}
+
+	@Override
+	public String fromBigInteger(BigInteger hashKey){
+		return DigestUtils.md5Hex(hashKey.toByteArray());
+	}
 	
 	
 	public MessageDigest getMd() {

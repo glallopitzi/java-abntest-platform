@@ -4,6 +4,8 @@ public class ABTestCluster {
 	private long id;
 	private long weight;
 	
+	private String abTestHashKey;
+	
 	private long rampUpTime;
 	private long rampUpStep;
 	private long rampUpInitialThreshold;
@@ -14,6 +16,12 @@ public class ABTestCluster {
 	}
 
 	
+	public ABTestCluster(long id, long weight, String abTestHashhKey) {
+		super();
+		this.abTestHashKey = abTestHashhKey;
+		this.id = id;
+		this.weight = weight;
+	}
 	
 	public ABTestCluster(long id, long weight) {
 		super();
@@ -43,6 +51,18 @@ public class ABTestCluster {
 	public void setWeight(long weight) {
 		this.weight = weight;
 	}
+
+	public String getAbTestHashKey() {
+		return abTestHashKey;
+	}
+
+
+
+	public void setAbTestHashKey(String abTestHashKey) {
+		this.abTestHashKey = abTestHashKey;
+	}
+
+
 
 	public long getRampUpTime() {
 		return rampUpTime;
