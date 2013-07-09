@@ -13,7 +13,9 @@ import net.jobrapido.abtest.services.StatisticalService;
 import net.jobrapido.abtest.services.UserAssignmentService;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+@Singleton
 public class ABTestManager {
 	
 	@Inject private StatisticalService statisticalService;

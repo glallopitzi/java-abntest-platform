@@ -76,7 +76,7 @@ public class App {
 
 		List<String> randomeUserIds = new ArrayList<String>();
 		
-		for( long counter = 1; counter < 100; counter++ ){
+		for( long counter = 1; counter < 1000000; counter++ ){
 			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
 //			String randomString = randomizationService.getRandomString();
 			String randomEmail = randomizationService.getRandomEmailAddress();
