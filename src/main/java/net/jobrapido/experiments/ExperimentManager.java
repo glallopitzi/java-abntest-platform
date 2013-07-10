@@ -104,6 +104,11 @@ public class ExperimentManager {
 	 * 
 	 */
 	
+	public ExperimentUser getExperimentUser(String name){
+		ExperimentUser experimentUser = new ExperimentUser(name, hashingService.getHashOfGivenString( name ));
+		return experimentUser;
+	}
+	
 	public Experiment getExperimentByName(String experimentName){
 		for (Experiment experiment : configurationService.getAllConfiguredExperiments()) {
 			if (experiment.getName().equals(experimentName)) return experiment;
@@ -119,11 +124,11 @@ public class ExperimentManager {
 		return assignmentService.getExperimentVariantForUserAndExperiment(experiment, experimentUser);
 	}
 	
-	public void forceExperimentForUser(Experiment experiment){
+	public void forceExperimentForUser(Experiment experiment, ExperimentUser experimentUser){
 		// TODO
 	}
 	
-	public void forceExperimentVariantForUser(Experiment experiment, ExperimentVariant experimentCluster){
+	public void forceExperimentVariantForUser(Experiment experiment, ExperimentUser experimentUser, ExperimentVariant experimentCluster){
 		// TODO
 	}
 	

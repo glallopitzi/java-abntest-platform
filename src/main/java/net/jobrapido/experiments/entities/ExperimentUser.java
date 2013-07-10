@@ -8,6 +8,13 @@ public class ExperimentUser {
 	private String assignedExperimentVariant;
 	
 	
+	public ExperimentUser(){}
+	
+	public ExperimentUser(String userId, String hashKey){
+		this.userId = userId;
+		this.hashKey = hashKey;
+	}
+	
 	
 	public String getUserId() {
 		return userId;
