@@ -18,13 +18,33 @@ import com.google.inject.Singleton;
 @Singleton
 public class ABTestManager {
 	
-	@Inject private StatisticalService statisticalService;
-	@Inject private UserAssignmentService assignmentService;
-	@Inject private DataPathService dataPathService;
-	@Inject private ConfigurationService configurationService;
-	@Inject private HashingService hashingService;
+	private StatisticalService statisticalService;
+	private UserAssignmentService assignmentService;
+	private DataPathService dataPathService;
+	private ConfigurationService configurationService;
+	private HashingService hashingService;
 
+	@Inject public void setStatisticalService(StatisticalService statisticalService) {
+		this.statisticalService = statisticalService;
+	}
 
+	@Inject public void setAssignmentService(UserAssignmentService assignmentService) {
+		this.assignmentService = assignmentService;
+	}
+
+	@Inject public void setDataPathService(DataPathService dataPathService) {
+		this.dataPathService = dataPathService;
+	}
+
+	@Inject public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
+
+	@Inject public void setHashingService(HashingService hashingService) {
+		this.hashingService = hashingService;
+	}
+	
+	
 	/*
 	 * Configuration related methods (init, flush, reload, add, del, upd, anable, disable)
 	 * - init: initialize configuration, load persisted conf in memory
