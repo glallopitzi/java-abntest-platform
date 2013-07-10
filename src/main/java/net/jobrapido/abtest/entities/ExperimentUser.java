@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
-public class ABTestUser {
+public class ExperimentUser {
 	private String userId;
 	private String hashKey;
 	private String assignedTest;

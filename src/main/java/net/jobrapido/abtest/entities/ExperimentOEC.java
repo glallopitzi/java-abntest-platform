@@ -2,9 +2,9 @@ package net.jobrapido.abtest.entities;
 
 import java.util.List;
 
-public class ABTestOEC {
+public class ExperimentOEC {
 	private String name;
-	private List<ABTestLog> metricsOfInterest;
+	private List<ExperimentLog> metricsOfInterest;
 	
 	public double evaluate(){
 		return 0d;

@@ -1,5 +1,5 @@
 package net.jobrapido.abtest.entities;
 
-public class ABTestResult {
+public class ExperimentResult {
 
 }

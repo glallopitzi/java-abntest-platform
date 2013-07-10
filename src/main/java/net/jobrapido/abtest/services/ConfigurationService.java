@@ -2,20 +2,20 @@ package net.jobrapido.abtest.services;
 
 import java.util.List;
 
-import net.jobrapido.abtest.entities.ABTest;
+import net.jobrapido.abtest.entities.Experiment;
 
 public interface ConfigurationService {
-	public List<ABTest> getAllConfiguredABTests();
-	public List<ABTest> getAllActiveABTests();
+	public List<Experiment> getAllConfiguredABTests();
+	public List<Experiment> getAllActiveABTests();
 	
 	public long getTotalActiveTestsWeight();
-	public long getTotalTestClustersWeight(ABTest abTest);
+	public long getTotalTestClustersWeight(Experiment abTest);
 	
 	public boolean flushConfiguration();
 	public boolean flushAndReloadConfiguration();
 	public boolean loadConfiguration();
 	
-	public boolean addABTest(ABTest abtest);
-	public boolean removeABTest(ABTest abtest);
-	public boolean updateABTest(ABTest abtest);
+	public boolean addABTest(Experiment abtest);
+	public boolean removeABTest(Experiment abtest);
+	public boolean updateABTest(Experiment abtest);
 }

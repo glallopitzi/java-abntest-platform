@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import net.jobrapido.abtest.entities.ABTest;
+import net.jobrapido.abtest.entities.Experiment;
 
 import org.apache.commons.io.FileUtils;
 
@@ -47,14 +47,14 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 	public boolean loadConfiguration() {
 		File configFile = new File(CONFIGURATION_FILENAME);
 		try {
-			ArrayList<ABTest> abtests = new ArrayList<ABTest>();
+			ArrayList<Experiment> abtests = new ArrayList<Experiment>();
 			Gson gson = new Gson();
 			JsonParser parser = new JsonParser();
 			String configString = FileUtils.readFileToString(configFile);
 			if ( ! "".equals(configString) ){
 				JsonArray array = parser.parse(configString).getAsJsonArray();
 				for(JsonElement obj : array){
-					ABTest elem = gson.fromJson(obj, ABTest.class);
+					Experiment elem = gson.fromJson(obj, Experiment.class);
 					abtests.add(elem);
 				}
 			}

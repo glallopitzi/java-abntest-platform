@@ -3,9 +3,9 @@ package net.jobrapido.abtest.services.impl;
 import java.math.BigInteger;
 import java.util.List;
 
-import net.jobrapido.abtest.entities.ABTest;
-import net.jobrapido.abtest.entities.ABTestCluster;
-import net.jobrapido.abtest.entities.ABTestUser;
+import net.jobrapido.abtest.entities.Experiment;
+import net.jobrapido.abtest.entities.ExperimentVariant;
+import net.jobrapido.abtest.entities.ExperimentUser;
 import net.jobrapido.abtest.services.ConfigurationService;
 import net.jobrapido.abtest.services.HashingService;
 import net.jobrapido.abtest.services.RandomizationService;
@@ -20,13 +20,13 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 	@Inject private HashingService hashingService;
 	
 	@Override
-	public ABTest getABTestForUser(ABTestUser abTestUser) {
-		List<ABTest> allActiveABTests = configurationService.getAllActiveABTests();
+	public Experiment getABTestForUser(ExperimentUser abTestUser) {
+		List<Experiment> allActiveABTests = configurationService.getAllActiveABTests();
 		long totalActiveTestsWeight = configurationService.getTotalActiveTestsWeight();
 		long abTestUserLong = Math.abs(hashingService.toBigInteger(abTestUser.getHashKey()).longValue());
 		long res =  abTestUserLong % totalActiveTestsWeight; 
 		long aux = 0;
-		for (ABTest abTest : allActiveABTests) {
+		for (Experiment abTest : allActiveABTests) {
 			long nextAux = aux + abTest.getTestWeight();
 			if((aux <= res) && (res < nextAux)) return abTest;
 			aux = nextAux;
@@ -35,9 +35,9 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 	}
 
 	@Override
-	public ABTestCluster getABTestClusterForUserAndABTest(ABTest abTest,
-			ABTestUser abTestUser) {
-		List<ABTestCluster> abTestClusters = abTest.getClusters();
+	public ExperimentVariant getABTestClusterForUserAndABTest(Experiment abTest,
+			ExperimentUser abTestUser) {
+		List<ExperimentVariant> abTestClusters = abTest.getClusters();
 		long totalClusterWeight = configurationService.getTotalTestClustersWeight(abTest);
 		BigInteger abTestBigInteger = hashingService.toBigInteger(abTest.getHashKey());
 		BigInteger abTestUserBigInteger = hashingService.toBigInteger(abTestUser.getHashKey());
@@ -47,7 +47,7 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 		long res = Math.abs(result.longValue()) % totalClusterWeight;
 		
 		long aux = 0;
-		for (ABTestCluster abTestCluster : abTestClusters) {
+		for (ExperimentVariant abTestCluster : abTestClusters) {
 			long nextAux = aux + abTestCluster.getWeight();
 			if((aux <= res) && (res < nextAux)) return abTestCluster;
 			aux = nextAux;

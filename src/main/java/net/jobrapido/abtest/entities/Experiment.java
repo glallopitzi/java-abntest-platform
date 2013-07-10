@@ -8,7 +8,7 @@ import java.util.List;
 
 
 
-public class ABTest {
+public class Experiment {
 	private long id;
 	private boolean isActive;
 	private long testWeight;
@@ -16,7 +16,7 @@ public class ABTest {
 	private String name;
 	private String hashKey;
 	
-	private List<ABTestCluster> clusters;
+	private List<ExperimentVariant> clusters;
 	private long clustersWeigth;
 	
 	private boolean hasWinner;
@@ -25,9 +25,9 @@ public class ABTest {
 	private Date startedAt;
 	private Date finishedAt;
 	
-	private ABTestOEC overallEvaluationCriterion;
+	private ExperimentOEC overallEvaluationCriterion;
 	
-	public ABTest(String name, long id, String hashKey) {
+	public Experiment(String name, long id, String hashKey) {
 		setId( id );
 		setActive( false );
 		setName( name );
@@ -37,7 +37,7 @@ public class ABTest {
 		setTestWeight(1l);
 	}
 	
-	public ABTest(String name, long id) {
+	public Experiment(String name, long id) {
 		setId( id );
 		setActive( false );
 		setName( name );
@@ -47,7 +47,7 @@ public class ABTest {
 		setTestWeight(1l);
 	}
 	
-	public ABTest() {
+	public Experiment() {
 		setCreatedAt( new Date() );
 		setHasWinner( false );
 		setActive( false );
@@ -121,7 +121,7 @@ public class ABTest {
 		
 		int count = 0;
 		sb.append("--      ");
-		for (ABTestCluster cluster : getClusters()) {
+		for (ExperimentVariant cluster : getClusters()) {
 			count++;
 			if (count == getClusters().size())
 				sb.append(cluster.toString() + "\n");
@@ -135,7 +135,7 @@ public class ABTest {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return ((ABTest)obj).getHashKey().equals(getHashKey());
+		return ((Experiment)obj).getHashKey().equals(getHashKey());
 	}
 	
 	
@@ -181,13 +181,13 @@ public class ABTest {
 		this.hashKey = hashKey;
 	}
 
-	public List<ABTestCluster> getClusters() {
+	public List<ExperimentVariant> getClusters() {
 		return clusters;
 	}
 
-	public void setClusters(List<ABTestCluster> clusters) {
+	public void setClusters(List<ExperimentVariant> clusters) {
 		long clustersWeigth = 0l;
-		for (ABTestCluster abTestCluster : clusters) {
+		for (ExperimentVariant abTestCluster : clusters) {
 			clustersWeigth += abTestCluster.getWeight();
 		}
 		this.clustersWeigth = clustersWeigth;

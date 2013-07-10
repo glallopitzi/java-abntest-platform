@@ -7,21 +7,21 @@ import java.util.Map;
 
 import javax.inject.Named;
 
-import net.jobrapido.abtest.entities.ABTest;
-import net.jobrapido.abtest.entities.ABTestCluster;
-import net.jobrapido.abtest.entities.ABTestUser;
+import net.jobrapido.abtest.entities.Experiment;
+import net.jobrapido.abtest.entities.ExperimentVariant;
+import net.jobrapido.abtest.entities.ExperimentUser;
 import net.jobrapido.abtest.services.RandomizationService;
 
 import com.google.inject.Inject;
 
 @Named
-public class ABTestManagerFacade {
+public class ExperimentManagerFacade {
 
-	@Inject private ABTestManager abTestManager;
+	@Inject private ExperimentManager abTestManager;
 	@Inject private RandomizationService randomizationService;
 		
-	private Map<ABTest, Integer> result = new HashMap<ABTest, Integer>();
-	private Map<ABTestCluster, Integer> clusterResult = new HashMap<ABTestCluster, Integer>();
+	private Map<Experiment, Integer> result = new HashMap<Experiment, Integer>();
+	private Map<ExperimentVariant, Integer> clusterResult = new HashMap<ExperimentVariant, Integer>();
 	
 	public void run(){
 		System.out.println( "------------ Demo BEGIN.." );
@@ -57,10 +57,10 @@ public class ABTestManagerFacade {
 			evaluateSomeUser( String.valueOf( userId ) );
 		}
 				
-		for (ABTest item : result.keySet()) {
+		for (Experiment item : result.keySet()) {
 			System.out.println(item + ": " + result.get(item));
-			List<ABTestCluster> clusters = item.getClusters();
-			for (ABTestCluster abTestCluster : clusters) {
+			List<ExperimentVariant> clusters = item.getClusters();
+			for (ExperimentVariant abTestCluster : clusters) {
 				System.out.println(abTestCluster + ": " + clusterResult.get(abTestCluster));
 			}
 		}
@@ -71,7 +71,7 @@ public class ABTestManagerFacade {
 
 		List<String> randomeUserIds = new ArrayList<String>();
 		
-		for( long counter = 1; counter < 1000000; counter++ ){
+		for( long counter = 1; counter < 10000; counter++ ){
 			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
 //			String randomString = randomizationService.getRandomString();
 			String randomEmail = randomizationService.getRandomEmailAddress();
@@ -100,9 +100,9 @@ public class ABTestManagerFacade {
 	}
 
 	private void evaluateSomeUser(String userId) {
-		ABTestUser dummyABTestUser = abTestManager.createDummyABTestUser( userId );
+		ExperimentUser dummyABTestUser = abTestManager.createDummyABTestUser( userId );
 		
-		ABTest abTestForUser = abTestManager.getABTestForUser( dummyABTestUser );
+		Experiment abTestForUser = abTestManager.getABTestForUser( dummyABTestUser );
 		if ( abTestForUser != null ){
 			if (result.containsKey(abTestForUser)){
 				Integer count = result.get(abTestForUser);
@@ -112,7 +112,7 @@ public class ABTestManagerFacade {
 			}
 		
 			
-			ABTestCluster abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
+			ExperimentVariant abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
 			if ( abTestClusterForUserAndABTest != null ){
 //				System.out.println( abTestClusterForUserAndABTest.toString() );
 				if (clusterResult.containsKey(abTestClusterForUserAndABTest)){
@@ -130,7 +130,7 @@ public class ABTestManagerFacade {
 	}
 	
 	private void modifySomeABTest(String name){
-		ABTest abTestByName = abTestManager.getABTestByName(name);
+		Experiment abTestByName = abTestManager.getABTestByName(name);
 		abTestManager.disableABTest(abTestByName);
 		abTestManager.enableABTest(abTestByName);
 		abTestManager.printActiveTests();
@@ -138,7 +138,7 @@ public class ABTestManagerFacade {
 
 	private void createSomeABTest(String name) {
 		
-		ABTest createDummyABTest = randomizationService.getRandomBoolean() ? abTestManager.createDummyABTestRandom(name, randomizationService.getRandomLong()) : abTestManager.createDummyABTest50(name, randomizationService.getRandomLong());
+		Experiment createDummyABTest = randomizationService.getRandomBoolean() ? abTestManager.createDummyABTestRandom(name, randomizationService.getRandomLong()) : abTestManager.createDummyABTest50(name, randomizationService.getRandomLong());
 		
 		abTestManager.createABTest(createDummyABTest);
 		abTestManager.enableABTest(createDummyABTest);

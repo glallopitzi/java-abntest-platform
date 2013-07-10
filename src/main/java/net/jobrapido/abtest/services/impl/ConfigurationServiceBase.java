@@ -3,25 +3,25 @@ package net.jobrapido.abtest.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.jobrapido.abtest.entities.ABTest;
-import net.jobrapido.abtest.entities.ABTestCluster;
+import net.jobrapido.abtest.entities.Experiment;
+import net.jobrapido.abtest.entities.ExperimentVariant;
 import net.jobrapido.abtest.services.ConfigurationService;
 
 public abstract class ConfigurationServiceBase implements ConfigurationService {
 
-	private List<ABTest> allConfiguredABTests;
+	private List<Experiment> allConfiguredABTests;
 	
 	@Override
-	public List<ABTest> getAllConfiguredABTests() {
+	public List<Experiment> getAllConfiguredABTests() {
 		if ( allConfiguredABTests == null ) { loadConfiguration(); }
 		return this.allConfiguredABTests;
 	}
 
 	@Override
-	public List<ABTest> getAllActiveABTests() {
+	public List<Experiment> getAllActiveABTests() {
 		if ( allConfiguredABTests == null ) { loadConfiguration(); }
-		List<ABTest> allActiveABTests = new ArrayList<ABTest>();
-		for (ABTest abTest : this.allConfiguredABTests) {
+		List<Experiment> allActiveABTests = new ArrayList<Experiment>();
+		for (Experiment abTest : this.allConfiguredABTests) {
 			if (abTest.isActive()) allActiveABTests.add(abTest);
 		}
 		return allActiveABTests;
@@ -29,10 +29,10 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 
 	
 	@Override
-	public long getTotalTestClustersWeight(ABTest abTest) {
+	public long getTotalTestClustersWeight(Experiment abTest) {
 		long tot = 0;
-		List<ABTestCluster> allABTestClusters = abTest.getClusters();
-		for (ABTestCluster abTestCluster : allABTestClusters) {
+		List<ExperimentVariant> allABTestClusters = abTest.getClusters();
+		for (ExperimentVariant abTestCluster : allABTestClusters) {
 			tot += abTestCluster.getWeight();
 		}
 		return tot;
@@ -41,8 +41,8 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 	@Override
 	public long getTotalActiveTestsWeight() {
 		long tot = 0;
-		List<ABTest> allActiveABTests = getAllActiveABTests();
-		for (ABTest abTest : allActiveABTests) {
+		List<Experiment> allActiveABTests = getAllActiveABTests();
+		for (Experiment abTest : allActiveABTests) {
 			tot += abTest.getTestWeight();
 		}
 		return tot;
@@ -63,7 +63,7 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 	public abstract boolean loadConfiguration();
 
 	@Override
-	public boolean addABTest(ABTest abtest) {
+	public boolean addABTest(Experiment abtest) {
 		if (allConfiguredABTests.add(abtest)){
 			return flushAndReloadConfiguration();
 		} 
@@ -71,7 +71,7 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 	}
 
 	@Override
-	public boolean removeABTest(ABTest abtest) {
+	public boolean removeABTest(Experiment abtest) {
 		if (allConfiguredABTests.remove(abtest)){
 			return flushAndReloadConfiguration();
 		} 
@@ -79,7 +79,7 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 	}
 
 	@Override
-	public boolean updateABTest(ABTest abtest) {
+	public boolean updateABTest(Experiment abtest) {
 		int index = allConfiguredABTests.indexOf(abtest);
 		if ( index >= 0){
 			if (allConfiguredABTests.set( index, abtest ) != null){
@@ -89,7 +89,7 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 		return false;
 	}
 
-	public void setAllConfiguredABTests(List<ABTest> allConfiguredABTests) {
+	public void setAllConfiguredABTests(List<Experiment> allConfiguredABTests) {
 		this.allConfiguredABTests = allConfiguredABTests;
 	}
 
