@@ -189,20 +189,19 @@ public class ExperimentManager {
 	}
 	
 	public void printActiveExperiments(){
-		System.out.println("-- BEGIN ACTIVE TESTS");
 		for (Experiment allActiveExperiments : configurationService.getAllActiveExperiments()) {
 			System.out.println(allActiveExperiments.toString());
 			System.out.println("--------");
 		}
-		System.out.println("---- END ACTIVE TESTS");
 	}
 	
 	public void printCurrentConfiguration(){
-		System.out.println("-- BEGIN");
 		for (Experiment configuredExperiment : configurationService.getAllConfiguredExperiments()) {
 			System.out.println(configuredExperiment.toString());
+			for (ExperimentVariant variant : configuredExperiment.getVariants()) {
+				System.out.println(variant.toString());
+			}
 			System.out.println("--------");
 		}
-		System.out.println("---- END");
 	}
 }

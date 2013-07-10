@@ -17,17 +17,14 @@ import com.google.inject.Inject;
 @Named
 public class ExperimentManagerFacade {
 
-	
-	
-	private long USER_NUMBER_TO_EVALUATE = 100000;
-	
-	
+	private long USER_NUMBER_TO_EVALUATE = 1000000;
+	private Map<Experiment, Integer> experimentAssignmentResult = new HashMap<Experiment, Integer>();
+	private Map<ExperimentVariant, Integer> variantAssignmentResult = new HashMap<ExperimentVariant, Integer>();
+
 	
 	@Inject private ExperimentManager experimentsManager;
 	@Inject private RandomizationService randomizationService;
 		
-	private Map<Experiment, Integer> experimentAssignmentResult = new HashMap<Experiment, Integer>();
-	private Map<ExperimentVariant, Integer> variantAssignmentResult = new HashMap<ExperimentVariant, Integer>();
 	
 	public void run(){
 		System.out.println( "------------ Demo BEGIN.." );
@@ -38,14 +35,8 @@ public class ExperimentManagerFacade {
 //		createSomeExperiments();
 		
 		evaluateSomeUsers();
-		
-//		modifySomeExperiment("change me");
-		
-//		evaluateSomeUser("giancarlolallopizzi@gmail.com");
-//		evaluateSomeUser("giancarlo.lallopizzi@jobrapido.com");
-
-		
-//		experimentManager.printCurrentConfiguration();
+				
+//		experimentsManager.printCurrentConfiguration();
 		
 		System.out.println( "------------ Demo END" );
 	}
@@ -99,7 +90,7 @@ public class ExperimentManagerFacade {
 
 
 	private void createSomeExperiments() {
-		String[] experimentNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two"};
+		String[] experimentNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two", "subscription div one", "smart jobalert one"};
 		for (String exp : experimentNames) {
 			createSomeExperiment(exp);	
 		}
