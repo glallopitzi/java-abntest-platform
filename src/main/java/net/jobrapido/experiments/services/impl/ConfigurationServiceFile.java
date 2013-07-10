@@ -1,10 +1,10 @@
-package net.jobrapido.abtest.services.impl;
+package net.jobrapido.experiments.services.impl;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import net.jobrapido.abtest.entities.Experiment;
+import net.jobrapido.experiments.entities.Experiment;
 
 import org.apache.commons.io.FileUtils;
 

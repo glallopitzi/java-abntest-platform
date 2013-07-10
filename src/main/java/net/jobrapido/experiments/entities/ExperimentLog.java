@@ -1,4 +1,4 @@
-package net.jobrapido.abtest.entities;
+package net.jobrapido.experiments.entities;
 
 public class ExperimentLog {
 	private String name;

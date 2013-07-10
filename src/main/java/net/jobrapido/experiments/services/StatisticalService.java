@@ -1,6 +1,6 @@
-package net.jobrapido.abtest.services;
+package net.jobrapido.experiments.services;
 
-import net.jobrapido.abtest.entities.ExperimentResult;
+import net.jobrapido.experiments.entities.ExperimentResult;
 
 public interface StatisticalService {
 	public boolean isABTestResultStatisticalConfident(ExperimentResult abTestResult);

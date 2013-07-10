@@ -1,7 +1,7 @@
-package net.jobrapido.abtest.services.impl;
+package net.jobrapido.experiments.services.impl;
 
-import net.jobrapido.abtest.entities.ExperimentResult;
-import net.jobrapido.abtest.services.StatisticalService;
+import net.jobrapido.experiments.entities.ExperimentResult;
+import net.jobrapido.experiments.services.StatisticalService;
 
 public class StatisticalServiceGTest implements StatisticalService {
 

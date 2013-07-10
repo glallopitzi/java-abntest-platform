@@ -1,4 +1,4 @@
-package net.jobrapido.abtest.services.impl;
+package net.jobrapido.experiments.services.impl;
 
 
 public class ConfigurationServiceMongoDB extends ConfigurationServiceBase {

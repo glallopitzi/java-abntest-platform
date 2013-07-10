@@ -1,15 +1,15 @@
-package net.jobrapido.abtest.services.impl;
+package net.jobrapido.experiments.services.impl;
 
 import java.math.BigInteger;
 import java.util.List;
 
-import net.jobrapido.abtest.entities.Experiment;
-import net.jobrapido.abtest.entities.ExperimentVariant;
-import net.jobrapido.abtest.entities.ExperimentUser;
-import net.jobrapido.abtest.services.ConfigurationService;
-import net.jobrapido.abtest.services.HashingService;
-import net.jobrapido.abtest.services.RandomizationService;
-import net.jobrapido.abtest.services.UserAssignmentService;
+import net.jobrapido.experiments.entities.Experiment;
+import net.jobrapido.experiments.entities.ExperimentUser;
+import net.jobrapido.experiments.entities.ExperimentVariant;
+import net.jobrapido.experiments.services.ConfigurationService;
+import net.jobrapido.experiments.services.HashingService;
+import net.jobrapido.experiments.services.RandomizationService;
+import net.jobrapido.experiments.services.UserAssignmentService;
 
 import com.google.inject.Inject;
 

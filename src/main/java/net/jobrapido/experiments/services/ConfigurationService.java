@@ -1,8 +1,8 @@
-package net.jobrapido.abtest.services;
+package net.jobrapido.experiments.services;
 
 import java.util.List;
 
-import net.jobrapido.abtest.entities.Experiment;
+import net.jobrapido.experiments.entities.Experiment;
 
 public interface ConfigurationService {
 	public List<Experiment> getAllConfiguredABTests();

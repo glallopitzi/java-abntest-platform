@@ -1,4 +1,4 @@
-package net.jobrapido.abtest.entities;
+package net.jobrapido.experiments.entities;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

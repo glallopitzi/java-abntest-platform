@@ -1,8 +1,8 @@
-package net.jobrapido.abtest.services.impl;
+package net.jobrapido.experiments.services.impl;
 
 import java.math.BigInteger;
 
-import net.jobrapido.abtest.services.HashingService;
+import net.jobrapido.experiments.services.HashingService;
 
 import org.apache.commons.codec.digest.DigestUtils;
 

@@ -1,4 +1,4 @@
-package net.jobrapido.abtest;
+package net.jobrapido.experiments;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

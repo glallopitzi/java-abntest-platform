@@ -1,4 +1,4 @@
-package net.jobrapido.abtest.services;
+package net.jobrapido.experiments.services;
 
 import java.math.BigInteger;
 

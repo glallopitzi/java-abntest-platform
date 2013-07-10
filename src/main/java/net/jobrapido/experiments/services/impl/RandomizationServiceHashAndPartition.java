@@ -1,9 +1,9 @@
-package net.jobrapido.abtest.services.impl;
+package net.jobrapido.experiments.services.impl;
 
 import java.security.SecureRandom;
 import java.util.Random;
 
-import net.jobrapido.abtest.services.RandomizationService;
+import net.jobrapido.experiments.services.RandomizationService;
 
 public class RandomizationServiceHashAndPartition implements
 		RandomizationService {
