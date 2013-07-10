@@ -17,29 +17,35 @@ import com.google.inject.Inject;
 @Named
 public class ExperimentManagerFacade {
 
-	@Inject private ExperimentManager abTestManager;
+	
+	
+	private long USER_NUMBER_TO_EVALUATE = 100000;
+	
+	
+	
+	@Inject private ExperimentManager experimentsManager;
 	@Inject private RandomizationService randomizationService;
 		
-	private Map<Experiment, Integer> result = new HashMap<Experiment, Integer>();
-	private Map<ExperimentVariant, Integer> clusterResult = new HashMap<ExperimentVariant, Integer>();
+	private Map<Experiment, Integer> experimentAssignmentResult = new HashMap<Experiment, Integer>();
+	private Map<ExperimentVariant, Integer> variantAssignmentResult = new HashMap<ExperimentVariant, Integer>();
 	
 	public void run(){
 		System.out.println( "------------ Demo BEGIN.." );
 		
 		// call this at very beginning of your app
-		abTestManager.init();
+		experimentsManager.init();
 		
-//		createSomeABTests();
+//		createSomeExperiments();
 		
 		evaluateSomeUsers();
 		
-//		modifySomeABTest("change me");
+//		modifySomeExperiment("change me");
 		
 //		evaluateSomeUser("giancarlolallopizzi@gmail.com");
 //		evaluateSomeUser("giancarlo.lallopizzi@jobrapido.com");
 
 		
-//		abTestManager.printCurrentConfiguration();
+//		experimentManager.printCurrentConfiguration();
 		
 		System.out.println( "------------ Demo END" );
 	}
@@ -57,11 +63,11 @@ public class ExperimentManagerFacade {
 			evaluateSomeUser( String.valueOf( userId ) );
 		}
 				
-		for (Experiment item : result.keySet()) {
-			System.out.println(item + ": " + result.get(item));
-			List<ExperimentVariant> clusters = item.getClusters();
-			for (ExperimentVariant abTestCluster : clusters) {
-				System.out.println(abTestCluster + ": " + clusterResult.get(abTestCluster));
+		for (Experiment item : experimentAssignmentResult.keySet()) {
+			System.out.println(item + ": " + experimentAssignmentResult.get(item));
+			List<ExperimentVariant> clusters = item.getVariants();
+			for (ExperimentVariant experimentCluster : clusters) {
+				System.out.println(experimentCluster + ": " + variantAssignmentResult.get(experimentCluster));
 			}
 		}
 		
@@ -71,7 +77,7 @@ public class ExperimentManagerFacade {
 
 		List<String> randomeUserIds = new ArrayList<String>();
 		
-		for( long counter = 1; counter < 10000; counter++ ){
+		for( long counter = 1; counter < USER_NUMBER_TO_EVALUATE; counter++ ){
 			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
 //			String randomString = randomizationService.getRandomString();
 			String randomEmail = randomizationService.getRandomEmailAddress();
@@ -92,34 +98,33 @@ public class ExperimentManagerFacade {
 
 
 
-	private void createSomeABTests() {
-		String[] abTestNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two"};
-		for (String string : abTestNames) {
-			createSomeABTest(string);	
+	private void createSomeExperiments() {
+		String[] experimentNames = {"link to inbox one", "link to inbox two","mailto light one","mailto light two"};
+		for (String exp : experimentNames) {
+			createSomeExperiment(exp);	
 		}
 	}
 
 	private void evaluateSomeUser(String userId) {
-		ExperimentUser dummyABTestUser = abTestManager.createDummyABTestUser( userId );
+		ExperimentUser dummyExperimentUser = experimentsManager.createDummyExperimentUser( userId );
 		
-		Experiment abTestForUser = abTestManager.getABTestForUser( dummyABTestUser );
-		if ( abTestForUser != null ){
-			if (result.containsKey(abTestForUser)){
-				Integer count = result.get(abTestForUser);
-				result.put(abTestForUser, count + 1);
+		Experiment experimentForUser = experimentsManager.getExperimentForUser( dummyExperimentUser );
+		if ( experimentForUser != null ){
+			if (experimentAssignmentResult.containsKey(experimentForUser)){
+				Integer count = experimentAssignmentResult.get(experimentForUser);
+				experimentAssignmentResult.put(experimentForUser, count + 1);
 			}else{
-				result.put(abTestForUser, 1);
+				experimentAssignmentResult.put(experimentForUser, 1);
 			}
 		
 			
-			ExperimentVariant abTestClusterForUserAndABTest = abTestManager.getABTestClusterForUserAndABTest(abTestForUser, dummyABTestUser);
-			if ( abTestClusterForUserAndABTest != null ){
-//				System.out.println( abTestClusterForUserAndABTest.toString() );
-				if (clusterResult.containsKey(abTestClusterForUserAndABTest)){
-					Integer count = clusterResult.get(abTestClusterForUserAndABTest);
-					clusterResult.put(abTestClusterForUserAndABTest, count + 1);
+			ExperimentVariant experimentVariantForUserAndExperiment = experimentsManager.getExperimentVariantForUserAndExperiment(experimentForUser, dummyExperimentUser);
+			if ( experimentVariantForUserAndExperiment != null ){
+				if (variantAssignmentResult.containsKey(experimentVariantForUserAndExperiment)){
+					Integer count = variantAssignmentResult.get(experimentVariantForUserAndExperiment);
+					variantAssignmentResult.put(experimentVariantForUserAndExperiment, count + 1);
 				}else{
-					clusterResult.put(abTestClusterForUserAndABTest, 1);
+					variantAssignmentResult.put(experimentVariantForUserAndExperiment, 1);
 				}
 				
 			}
@@ -129,20 +134,20 @@ public class ExperimentManagerFacade {
 		}
 	}
 	
-	private void modifySomeABTest(String name){
-		Experiment abTestByName = abTestManager.getABTestByName(name);
-		abTestManager.disableABTest(abTestByName);
-		abTestManager.enableABTest(abTestByName);
-		abTestManager.printActiveTests();
+	private void modifySomeExperiment(String experimentName){
+		Experiment experiment = experimentsManager.getExperimentByName(experimentName);
+		experimentsManager.disableExperiment(experiment);
+		experimentsManager.enableExperiment(experiment);
+		experimentsManager.printActiveExperiments();
 	}
 
-	private void createSomeABTest(String name) {
+	private void createSomeExperiment(String name) {
 		
-		Experiment createDummyABTest = randomizationService.getRandomBoolean() ? abTestManager.createDummyABTestRandom(name, randomizationService.getRandomLong()) : abTestManager.createDummyABTest50(name, randomizationService.getRandomLong());
+		Experiment dummyExperiment = randomizationService.getRandomBoolean() ? experimentsManager.createDummyExperimentRandom(name, randomizationService.getRandomLong()) : experimentsManager.createDummyExperiment50(name, randomizationService.getRandomLong());
 		
-		abTestManager.createABTest(createDummyABTest);
-		abTestManager.enableABTest(createDummyABTest);
-		abTestManager.printCurrentConfiguration();
+		experimentsManager.createExperiment(dummyExperiment);
+		experimentsManager.enableExperiment(dummyExperiment);
+		experimentsManager.printCurrentConfiguration();
 	}
 
 }

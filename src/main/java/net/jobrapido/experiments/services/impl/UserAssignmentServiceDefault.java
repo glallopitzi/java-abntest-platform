@@ -20,37 +20,36 @@ public class UserAssignmentServiceDefault implements UserAssignmentService {
 	@Inject private HashingService hashingService;
 	
 	@Override
-	public Experiment getABTestForUser(ExperimentUser abTestUser) {
-		List<Experiment> allActiveABTests = configurationService.getAllActiveABTests();
-		long totalActiveTestsWeight = configurationService.getTotalActiveTestsWeight();
-		long abTestUserLong = Math.abs(hashingService.toBigInteger(abTestUser.getHashKey()).longValue());
-		long res =  abTestUserLong % totalActiveTestsWeight; 
-		long aux = 0;
-		for (Experiment abTest : allActiveABTests) {
-			long nextAux = aux + abTest.getTestWeight();
-			if((aux <= res) && (res < nextAux)) return abTest;
-			aux = nextAux;
+	public Experiment getExperimentForUser(ExperimentUser experimentUser) {
+		List<Experiment> allActiveExperiments = configurationService.getAllActiveExperiments();
+		long totalActiveExperimentsWeight = configurationService.getTotalActiveExperimentsWeight();
+		long experimentUserLongValue = Math.abs(hashingService.toBigInteger(experimentUser.getHashKey()).longValue());
+		long experimentSlotAssignment =  experimentUserLongValue % totalActiveExperimentsWeight; 
+		long threshold = 0;
+		for (Experiment experiment : allActiveExperiments) {
+			long nextThreshold = threshold + experiment.getExperimentWeight();
+			if((threshold <= experimentSlotAssignment) && (experimentSlotAssignment < nextThreshold)) return experiment;
+			threshold = nextThreshold;
 		}
 		return null;
 	}
 
 	@Override
-	public ExperimentVariant getABTestClusterForUserAndABTest(Experiment abTest,
-			ExperimentUser abTestUser) {
-		List<ExperimentVariant> abTestClusters = abTest.getClusters();
-		long totalClusterWeight = configurationService.getTotalTestClustersWeight(abTest);
-		BigInteger abTestBigInteger = hashingService.toBigInteger(abTest.getHashKey());
-		BigInteger abTestUserBigInteger = hashingService.toBigInteger(abTestUser.getHashKey());
-		BigInteger result = abTestBigInteger.xor(abTestUserBigInteger).abs();
+	public ExperimentVariant getExperimentVariantForUserAndExperiment(Experiment experiment,
+			ExperimentUser experimentUser) {
+		List<ExperimentVariant> experimentVariants = experiment.getVariants();
+		long totalVariantsWeight = configurationService.getTotalExperimentVariantsWeight(experiment);
 		
+		BigInteger experimentBigIntegerValue = hashingService.toBigInteger(experiment.getHashKey());
+		BigInteger experimentUserBigIntegerValue = hashingService.toBigInteger(experimentUser.getHashKey());
+		BigInteger experimentUserXORExperimentBigIntegerValue = experimentBigIntegerValue.xor(experimentUserBigIntegerValue).abs();
+		long variantSlotAssignment = Math.abs(experimentUserXORExperimentBigIntegerValue.longValue()) % totalVariantsWeight;
 		
-		long res = Math.abs(result.longValue()) % totalClusterWeight;
-		
-		long aux = 0;
-		for (ExperimentVariant abTestCluster : abTestClusters) {
-			long nextAux = aux + abTestCluster.getWeight();
-			if((aux <= res) && (res < nextAux)) return abTestCluster;
-			aux = nextAux;
+		long threshold = 0;
+		for (ExperimentVariant experimentVariant : experimentVariants) {
+			long nextThreshold = threshold + experimentVariant.getWeight();
+			if((threshold <= variantSlotAssignment) && (variantSlotAssignment < nextThreshold)) return experimentVariant;
+			threshold = nextThreshold;
 		}
 		return null;
 	}

@@ -9,6 +9,7 @@ import net.jobrapido.experiments.entities.ExperimentVariant;
 import net.jobrapido.experiments.services.ConfigurationService;
 import net.jobrapido.experiments.services.DataPathService;
 import net.jobrapido.experiments.services.HashingService;
+import net.jobrapido.experiments.services.RandomizationService;
 import net.jobrapido.experiments.services.StatisticalService;
 import net.jobrapido.experiments.services.UserAssignmentService;
 
@@ -23,6 +24,7 @@ public class ExperimentManager {
 	private DataPathService dataPathService;
 	private ConfigurationService configurationService;
 	private HashingService hashingService;
+	private RandomizationService randomizationService;
 
 	@Inject public void setStatisticalService(StatisticalService statisticalService) {
 		this.statisticalService = statisticalService;
@@ -44,15 +46,18 @@ public class ExperimentManager {
 		this.hashingService = hashingService;
 	}
 	
+	@Inject public void setRandomizationService(RandomizationService randomizationService) {
+		this.randomizationService = randomizationService;
+	}
 	
 	/*
 	 * Configuration related methods (init, flush, reload, add, del, upd, anable, disable)
 	 * - init: initialize configuration, load persisted conf in memory
 	 * - flush: persist configuration
 	 * - reload: 
-	 * - add: add a new test
-	 * - del: remove a test
-	 * - upd: update a test
+	 * - add: add a new experiment
+	 * - del: remove a experiment
+	 * - upd: update a experiment
 	 * ..
 	 */
 
@@ -68,26 +73,26 @@ public class ExperimentManager {
 		configurationService.flushConfiguration();
 	}
 	
-	public boolean createABTest(Experiment abtest){
-		return configurationService.addABTest(abtest);
+	public boolean createExperiment(Experiment experiment){
+		return configurationService.addExperiment(experiment);
 	}
 	
-	public boolean removeABTest(Experiment abtest){
-		return configurationService.removeABTest(abtest);
+	public boolean removeExperiment(Experiment experiment){
+		return configurationService.removeExperiment(experiment);
 	}
 	
-	public boolean updateABTest(Experiment abtest){
-		return configurationService.updateABTest(abtest);
+	public boolean updateExperiment(Experiment experiment){
+		return configurationService.updateExperiment(experiment);
 	}
 	
-	public boolean enableABTest(Experiment abtest){
-		abtest.activate();
-		return configurationService.updateABTest(abtest);
+	public boolean enableExperiment(Experiment experiment){
+		experiment.activate();
+		return configurationService.updateExperiment(experiment);
 	}
 	
-	public boolean disableABTest(Experiment abtest){
-		abtest.disable();
-		return configurationService.updateABTest(abtest);
+	public boolean disableExperiment(Experiment experiment){
+		experiment.disable();
+		return configurationService.updateExperiment(experiment);
 	}
 	
 	
@@ -99,26 +104,26 @@ public class ExperimentManager {
 	 * 
 	 */
 	
-	public Experiment getABTestByName(String name){
-		for (Experiment abtest : configurationService.getAllConfiguredABTests()) {
-			if (abtest.getName().equals(name)) return abtest;
+	public Experiment getExperimentByName(String experimentName){
+		for (Experiment experiment : configurationService.getAllConfiguredExperiments()) {
+			if (experiment.getName().equals(experimentName)) return experiment;
 		}
 		return null;
 	}
 	
-	public Experiment getABTestForUser(ExperimentUser abtestUser){
-		return assignmentService.getABTestForUser(abtestUser);
+	public Experiment getExperimentForUser(ExperimentUser experimentUser){
+		return assignmentService.getExperimentForUser(experimentUser);
 	}
 	
-	public ExperimentVariant getABTestClusterForUserAndABTest(Experiment abTest, ExperimentUser abtestUser){
-		return assignmentService.getABTestClusterForUserAndABTest(abTest, abtestUser);
+	public ExperimentVariant getExperimentVariantForUserAndExperiment(Experiment experiment, ExperimentUser experimentUser){
+		return assignmentService.getExperimentVariantForUserAndExperiment(experiment, experimentUser);
 	}
 	
-	public void forceABTestForUser(Experiment abTest){
+	public void forceExperimentForUser(Experiment experiment){
 		// TODO
 	}
 	
-	public void forceABTestClusterForUser(Experiment abTest, ExperimentVariant abTestCluster){
+	public void forceExperimentVariantForUser(Experiment experiment, ExperimentVariant experimentCluster){
 		// TODO
 	}
 	
@@ -137,53 +142,56 @@ public class ExperimentManager {
 	 * 
 	 */
 	
-	public Experiment createDummyABTest50(String name, long id) {
-  		Experiment abTest = new Experiment( name, id );
-	    abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-	    List<ExperimentVariant> abTestClustersFiftyFifty = getFiftyFiftyClusterList(abTest);
-	    abTest.setClusters(abTestClustersFiftyFifty);
-		return abTest;
+	public Experiment createDummyExperiment50(String name, long id) {
+  		Experiment experiment = new Experiment( name, id, hashingService.getHashOfGivenString( name + id ) );
+	    List<ExperimentVariant> experimentClustersFiftyFifty = getFiftyFiftyVariantsList(experiment);
+	    experiment.setVariants(experimentClustersFiftyFifty);
+	    long randomExperimentWeight = randomizationService.getRandomLong(1, 9);
+	    experiment.setExperimentWeight(randomExperimentWeight);
+		return experiment;
 	}
 	
-	public Experiment createDummyABTestRandom(String name, long id) {
-  		Experiment abTest = new Experiment( name, id );
-  		abTest.setHashKey( hashingService.getHashOfGivenString( abTest.getName() + abTest.getId() ) );
-  		List<ExperimentVariant> abTestClustersFiftyFifty = getRandomClusterList(abTest);
-	    abTest.setClusters(abTestClustersFiftyFifty);
-		return abTest;
+	public Experiment createDummyExperimentRandom(String name, long id) {
+		Experiment experiment = new Experiment( name, id, hashingService.getHashOfGivenString( name + id ) );
+	    List<ExperimentVariant> experimentClustersFiftyFifty = getRandomVariantsList(experiment);
+	    experiment.setVariants(experimentClustersFiftyFifty);
+	    long randomExperimentWeight = randomizationService.getRandomLong(1, 9);
+	    experiment.setExperimentWeight(randomExperimentWeight);
+		return experiment;
 	}
 	
 	
-	public List<ExperimentVariant> getFiftyFiftyClusterList(Experiment abTest){
-		List<ExperimentVariant> abTestClustersFiftyFifty = new ArrayList<ExperimentVariant>();
-  		abTestClustersFiftyFifty.add(new ExperimentVariant(1l, 1l, abTest.getHashKey()));
-  		abTestClustersFiftyFifty.add(new ExperimentVariant(2l, 1l, abTest.getHashKey()));
-  		return abTestClustersFiftyFifty;
+	public List<ExperimentVariant> getFiftyFiftyVariantsList(Experiment experiment){
+		List<ExperimentVariant> experimentVariantsFiftyFifty = new ArrayList<ExperimentVariant>();
+  		experimentVariantsFiftyFifty.add(new ExperimentVariant(1l, 1l, experiment.getHashKey()));
+  		experimentVariantsFiftyFifty.add(new ExperimentVariant(2l, 1l, experiment.getHashKey()));
+  		return experimentVariantsFiftyFifty;
 	}
 	
-	public List<ExperimentVariant> getRandomClusterList(Experiment abTest){
-		List<ExperimentVariant> abTestClustersFiftyFifty = new ArrayList<ExperimentVariant>();
+	public List<ExperimentVariant> getRandomVariantsList(Experiment experiment){
+		List<ExperimentVariant> experimentVariantsFiftyFifty = new ArrayList<ExperimentVariant>();
 		
-		// TODO make random cluster list here
-		abTestClustersFiftyFifty.add(new ExperimentVariant(1l, 1l, abTest.getHashKey()));
-  		abTestClustersFiftyFifty.add(new ExperimentVariant(2l, 2l, abTest.getHashKey()));
-  		abTestClustersFiftyFifty.add(new ExperimentVariant(3l, 3l, abTest.getHashKey()));
-  		abTestClustersFiftyFifty.add(new ExperimentVariant(4l, 3l, abTest.getHashKey()));
+		long randomNumberOfVariants = randomizationService.getRandomLong(2, 10);
+		
+		for (long i = 1l; i <= randomNumberOfVariants; i++){
+			long randomWeightOfVariant = randomizationService.getRandomLong(1, 10);
+			experimentVariantsFiftyFifty.add(new ExperimentVariant(i, randomWeightOfVariant, experiment.getHashKey()));
+		}
   		
-  		return abTestClustersFiftyFifty;
+  		return experimentVariantsFiftyFifty;
 	}
 	
-	public ExperimentUser createDummyABTestUser(String name){
-		ExperimentUser abTestUser = new ExperimentUser();
-		abTestUser.setUserId(name);
-		abTestUser.setHashKey( hashingService.getHashOfGivenString( name ) );
-		return abTestUser;
+	public ExperimentUser createDummyExperimentUser(String name){
+		ExperimentUser experimentUser = new ExperimentUser();
+		experimentUser.setUserId(name);
+		experimentUser.setHashKey( hashingService.getHashOfGivenString( name ) );
+		return experimentUser;
 	}
 	
-	public void printActiveTests(){
+	public void printActiveExperiments(){
 		System.out.println("-- BEGIN ACTIVE TESTS");
-		for (Experiment configuredABTest : configurationService.getAllActiveABTests()) {
-			System.out.println(configuredABTest.toString());
+		for (Experiment allActiveExperiments : configurationService.getAllActiveExperiments()) {
+			System.out.println(allActiveExperiments.toString());
 			System.out.println("--------");
 		}
 		System.out.println("---- END ACTIVE TESTS");
@@ -191,8 +199,8 @@ public class ExperimentManager {
 	
 	public void printCurrentConfiguration(){
 		System.out.println("-- BEGIN");
-		for (Experiment configuredABTest : configurationService.getAllConfiguredABTests()) {
-			System.out.println(configuredABTest.toString());
+		for (Experiment configuredExperiment : configurationService.getAllConfiguredExperiments()) {
+			System.out.println(configuredExperiment.toString());
 			System.out.println("--------");
 		}
 		System.out.println("---- END");

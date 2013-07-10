@@ -1,8 +1,5 @@
 package net.jobrapido.experiments.entities;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
@@ -11,13 +8,13 @@ import java.util.List;
 public class Experiment {
 	private long id;
 	private boolean isActive;
-	private long testWeight;
+	private long experimentWeight;
 	
 	private String name;
 	private String hashKey;
 	
-	private List<ExperimentVariant> clusters;
-	private long clustersWeigth;
+	private List<ExperimentVariant> variants;
+	private long variantsWeigth;
 	
 	private boolean hasWinner;
 	
@@ -27,31 +24,14 @@ public class Experiment {
 	
 	private ExperimentOEC overallEvaluationCriterion;
 	
-	public Experiment(String name, long id, String hashKey) {
+	public Experiment(String experimentName, long id, String experimentHashKey) {
 		setId( id );
 		setActive( false );
-		setName( name );
-		setHashKey( hashKey );
+		setName( experimentName );
+		setHashKey( experimentHashKey );
 		setCreatedAt( new Date() );
 		setHasWinner( false );
-		setTestWeight(1l);
-	}
-	
-	public Experiment(String name, long id) {
-		setId( id );
-		setActive( false );
-		setName( name );
-		setHashKey( calculateHashKey() );
-		setCreatedAt( new Date() );
-		setHasWinner( false );
-		setTestWeight(1l);
-	}
-	
-	public Experiment() {
-		setCreatedAt( new Date() );
-		setHasWinner( false );
-		setActive( false );
-		setTestWeight(1l);
+		setExperimentWeight(1l);
 	}
 	
 	
@@ -77,27 +57,6 @@ public class Experiment {
 		return true;
 	}
 	
-	private String calculateHashKey(){
-		// TODO make hash here
-		
-		String clearName = getName() + String.valueOf( getId() );
-		String result = "";
-		try {
-			byte[] bytesOfMessage = clearName.getBytes("UTF-8");
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			byte[] thedigest = md.digest(bytesOfMessage);
-			result = thedigest.toString();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-	
 	
 	
 	@Override
@@ -110,8 +69,8 @@ public class Experiment {
 		String hasWinner = isHasWinner() ? "Y" : "N";
 		String finishedAt = isHasWinner() ? getFinishedAt().toString() : "";
 		
-		sb.append("ABTest[name("+getName()+"), ");
-		sb.append("weigth("+getTestWeight()+"), ");
+		sb.append("Experiment[name("+getName()+"), ");
+		sb.append("weigth("+getExperimentWeight()+"), ");
 		sb.append("hashKey("+getHashKey()+"), ");
 		sb.append("createdAt("+createdAt+"), ");
 		sb.append("isActive("+isActive+"), ");
@@ -121,9 +80,9 @@ public class Experiment {
 		
 		int count = 0;
 		sb.append("--      ");
-		for (ExperimentVariant cluster : getClusters()) {
+		for (ExperimentVariant cluster : getVariants()) {
 			count++;
-			if (count == getClusters().size())
+			if (count == getVariants().size())
 				sb.append(cluster.toString() + "\n");
 			else
 				sb.append(cluster.toString() + "||");
@@ -157,12 +116,12 @@ public class Experiment {
 		this.isActive = isActive;
 	}
 
-	public long getTestWeight() {
-		return testWeight;
+	public long getExperimentWeight() {
+		return experimentWeight;
 	}
 
-	public void setTestWeight(long testWeight) {
-		this.testWeight = testWeight;
+	public void setExperimentWeight(long experimentWeight) {
+		this.experimentWeight = experimentWeight;
 	}
 
 	public String getName() {
@@ -181,25 +140,25 @@ public class Experiment {
 		this.hashKey = hashKey;
 	}
 
-	public List<ExperimentVariant> getClusters() {
-		return clusters;
+	public List<ExperimentVariant> getVariants() {
+		return variants;
 	}
 
-	public void setClusters(List<ExperimentVariant> clusters) {
-		long clustersWeigth = 0l;
-		for (ExperimentVariant abTestCluster : clusters) {
-			clustersWeigth += abTestCluster.getWeight();
+	public void setVariants(List<ExperimentVariant> variants) {
+		long variantsWeigth = 0l;
+		for (ExperimentVariant experimentVariant : variants) {
+			variantsWeigth += experimentVariant.getWeight();
 		}
-		this.clustersWeigth = clustersWeigth;
-		this.clusters = clusters;
+		this.variantsWeigth = variantsWeigth;
+		this.variants = variants;
 	}
 
-	public long getClustersWeigth() {
-		return clustersWeigth;
+	public long getVariantsWeigth() {
+		return variantsWeigth;
 	}
 
-	public void setClustersWeigth(long clustersWeigth) {
-		this.clustersWeigth = clustersWeigth;
+	public void setVariantsWeigth(long variantsWeigth) {
+		this.variantsWeigth = variantsWeigth;
 	}
 
 	public boolean isHasWinner() {

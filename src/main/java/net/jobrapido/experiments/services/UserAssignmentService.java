@@ -5,6 +5,6 @@ import net.jobrapido.experiments.entities.ExperimentUser;
 import net.jobrapido.experiments.entities.ExperimentVariant;
 
 public interface UserAssignmentService {
-	public Experiment getABTestForUser(ExperimentUser abTestUser);
-	public ExperimentVariant getABTestClusterForUserAndABTest(Experiment abTest, ExperimentUser abTestUser);
+	public Experiment getExperimentForUser(ExperimentUser experimentUser);
+	public ExperimentVariant getExperimentVariantForUserAndExperiment(Experiment experiment, ExperimentUser experimentUser);
 }

@@ -16,7 +16,7 @@ import com.google.gson.JsonParser;
 public class ConfigurationServiceFile extends ConfigurationServiceBase {
 
 	
-	private final static String CONFIGURATION_FILENAME = "C:/abtestConfiguration";
+	private final static String CONFIGURATION_FILENAME = "C:/experimentConfigurations";
 	
 	
 	@Override
@@ -26,7 +26,7 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 		StringBuilder sb = new StringBuilder(200);
 		
 		Gson gson = new Gson();
-		sb.append(gson.toJson(getAllConfiguredABTests()));
+		sb.append(gson.toJson(getAllConfiguredExperiments()));
 		
 		File configFile = new File(CONFIGURATION_FILENAME);
 		try {
@@ -47,18 +47,18 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 	public boolean loadConfiguration() {
 		File configFile = new File(CONFIGURATION_FILENAME);
 		try {
-			ArrayList<Experiment> abtests = new ArrayList<Experiment>();
+			ArrayList<Experiment> experiments = new ArrayList<Experiment>();
 			Gson gson = new Gson();
 			JsonParser parser = new JsonParser();
 			String configString = FileUtils.readFileToString(configFile);
 			if ( ! "".equals(configString) ){
 				JsonArray array = parser.parse(configString).getAsJsonArray();
 				for(JsonElement obj : array){
-					Experiment elem = gson.fromJson(obj, Experiment.class);
-					abtests.add(elem);
+					Experiment experiment = gson.fromJson(obj, Experiment.class);
+					experiments.add(experiment);
 				}
 			}
-			setAllConfiguredABTests(abtests);
+			setAllConfiguredExperiments(experiments);
 			
 			return true;
 		} catch (IOException e) {

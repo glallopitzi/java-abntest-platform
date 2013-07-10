@@ -4,40 +4,31 @@ public class ExperimentVariant {
 	private long id;
 	private long weight;
 	
-	private String abTestHashKey;
+	private String experimentHashKey;
 	
 	private long rampUpTime;
 	private long rampUpStep;
 	private long rampUpInitialThreshold;
 	private long rampUpFinalThreshold;
 	
-	public ExperimentVariant() {
-		// TODO Auto-generated constructor stub
-	}
-
-	
-	public ExperimentVariant(long id, long weight, String abTestHashhKey) {
+		
+	public ExperimentVariant(long id, long weight, String experimentHashKey) {
 		super();
-		this.abTestHashKey = abTestHashhKey;
+		this.experimentHashKey = experimentHashKey;
 		this.id = id;
 		this.weight = weight;
 	}
 	
-	public ExperimentVariant(long id, long weight) {
-		super();
-		this.id = id;
-		this.weight = weight;
-	}
 
 	
 	@Override
 	public boolean equals(Object obj) {
-		return ( this.getAbTestHashKey().equals(((ExperimentVariant)obj).getAbTestHashKey()) && this.getId() == ((ExperimentVariant)obj).getId() );
+		return ( this.getExperimentHashKey().equals(((ExperimentVariant)obj).getExperimentHashKey()) && this.getId() == ((ExperimentVariant)obj).getId() );
 	}
 	
 	@Override
 	public String toString() {
-		return "variant[id("+getId()+"), weigth("+getWeight()+"), abTestHashKey("+getAbTestHashKey()+")]";
+		return "variant[id("+getId()+"), weigth("+getWeight()+"), experimentHashKey("+getExperimentHashKey()+")]";
 	}
 	
 
@@ -57,17 +48,13 @@ public class ExperimentVariant {
 		this.weight = weight;
 	}
 
-	public String getAbTestHashKey() {
-		return abTestHashKey;
+	public String getExperimentHashKey() {
+		return experimentHashKey;
 	}
 
-
-
-	public void setAbTestHashKey(String abTestHashKey) {
-		this.abTestHashKey = abTestHashKey;
+	public void setExperimentHashKey(String experimentHashKey) {
+		this.experimentHashKey = experimentHashKey;
 	}
-
-
 
 	public long getRampUpTime() {
 		return rampUpTime;

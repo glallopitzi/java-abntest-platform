@@ -1,29 +1,11 @@
 package net.jobrapido.experiments.entities;
 
-import java.nio.ByteBuffer;
-
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 
 public class ExperimentUser {
 	private String userId;
 	private String hashKey;
-	private String assignedTest;
-	private String assignedTestCluster;
-	
-	
-
-	public long toLong(){
-		byte[] bytes = null;
-		try {
-			bytes = Hex.decodeHex(getHashKey().toCharArray());
-		} catch (DecoderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return ByteBuffer.wrap(bytes).getLong();
-	}
-	
+	private String assignedExperiment;
+	private String assignedExperimentVariant;
 	
 	
 	
@@ -39,17 +21,17 @@ public class ExperimentUser {
 	public void setHashKey(String hashKey) {
 		this.hashKey = hashKey;
 	}
-	public String getAssignedTest() {
-		return assignedTest;
+	public String getAssignedExperiment() {
+		return assignedExperiment;
 	}
-	public void setAssignedTest(String assignedTest) {
-		this.assignedTest = assignedTest;
+	public void setAssignedExperiment(String assignedExperiment) {
+		this.assignedExperiment = assignedExperiment;
 	}
-	public String getAssignedTestCluster() {
-		return assignedTestCluster;
+	public String getAssignedExperimentVariant() {
+		return assignedExperimentVariant;
 	}
-	public void setAssignedTestCluster(String assignedTestCluster) {
-		this.assignedTestCluster = assignedTestCluster;
+	public void setAssignedExperimentVariant(String assignedExperimentVariant) {
+		this.assignedExperimentVariant = assignedExperimentVariant;
 	}
 	
 }

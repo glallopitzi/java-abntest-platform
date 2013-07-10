@@ -6,7 +6,7 @@ import net.jobrapido.experiments.services.StatisticalService;
 public class StatisticalServiceTTest implements StatisticalService {
 
 	@Override
-	public boolean isABTestResultStatisticalConfident(ExperimentResult abTestResult) {
+	public boolean isExperimentResultStatisticalConfident(ExperimentResult experimentResult) {
 		// TODO Auto-generated method stub
 		return false;
 	}
