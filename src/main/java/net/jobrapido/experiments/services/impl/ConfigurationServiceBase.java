@@ -64,16 +64,20 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 
 	@Override
 	public boolean addExperiment(Experiment experiment) {
-		if (allConfiguredExperiments.add(experiment)){
-			return flushAndReloadConfiguration();
-		} 
+		if ( ! allConfiguredExperiments.contains( experiment ) ) {
+			if ( allConfiguredExperiments.add( experiment ) ) {
+				return flushAndReloadConfiguration();
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean removeExperiment(Experiment experiment) {
-		if (allConfiguredExperiments.remove(experiment)){
-			return flushAndReloadConfiguration();
+		if ( allConfiguredExperiments.contains( experiment ) ) {
+			if ( allConfiguredExperiments.remove( experiment ) ) {
+				return flushAndReloadConfiguration();
+			}
 		} 
 		return false;
 	}
@@ -81,8 +85,8 @@ public abstract class ConfigurationServiceBase implements ConfigurationService {
 	@Override
 	public boolean updateExperiment(Experiment experiment) {
 		int index = allConfiguredExperiments.indexOf(experiment);
-		if ( index >= 0){
-			if (allConfiguredExperiments.set( index, experiment ) != null){
+		if ( index >= 0 ) {
+			if ( allConfiguredExperiments.set( index, experiment ) != null ) {
 				return flushAndReloadConfiguration();
 			}
 		}
