@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class ExperimentManagerLocalImpl implements ExperimentManager {
+public class ExperimentManagerLocal implements ExperimentManager {
 	
 	private StatisticalService statisticalService;
 	private UserAssignmentService assignmentService;

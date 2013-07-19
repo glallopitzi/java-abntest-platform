@@ -1,7 +1,7 @@
 package net.jobrapido.experiments;
 
 import net.jobrapido.experiments.manager.ExperimentManager;
-import net.jobrapido.experiments.manager.ExperimentManagerLocalImpl;
+import net.jobrapido.experiments.manager.ExperimentManagerLocal;
 import net.jobrapido.experiments.services.ConfigurationService;
 import net.jobrapido.experiments.services.DataPathService;
 import net.jobrapido.experiments.services.HashingService;
@@ -22,7 +22,7 @@ public class AppModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(ExperimentManager.class).to(ExperimentManagerLocalImpl.class);
+		bind(ExperimentManager.class).to(ExperimentManagerLocal.class);
 		
 		bind(RandomizationService.class).to(RandomizationServiceHashAndPartition.class);
 		bind(UserAssignmentService.class).to(UserAssignmentServiceDefault.class);
