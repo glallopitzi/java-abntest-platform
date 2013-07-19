@@ -10,6 +10,8 @@ import javax.inject.Named;
 import net.jobrapido.experiments.entities.Experiment;
 import net.jobrapido.experiments.entities.ExperimentUser;
 import net.jobrapido.experiments.entities.ExperimentVariant;
+import net.jobrapido.experiments.services.ConfigurationService;
+import net.jobrapido.experiments.services.HashingService;
 import net.jobrapido.experiments.services.RandomizationService;
 
 import com.google.inject.Inject;
@@ -24,7 +26,8 @@ public class ExperimentManagerFacade {
 	
 	@Inject private ExperimentManager experimentsManager;
 	@Inject private RandomizationService randomizationService;
-		
+	@Inject private HashingService hashingService;
+	@Inject private ConfigurationService configurationService;
 	
 	public void run(){
 		System.out.println( "------------ Demo BEGIN.." );
@@ -97,7 +100,8 @@ public class ExperimentManagerFacade {
 	}
 
 	private void evaluateSomeUser(String userId) {
-		ExperimentUser dummyExperimentUser = experimentsManager.createDummyExperimentUser( userId );
+		
+		ExperimentUser dummyExperimentUser = createDummyExperimentUser( userId );
 		
 		Experiment experimentForUser = experimentsManager.getExperimentForUser( dummyExperimentUser );
 		if ( experimentForUser != null ){
@@ -129,16 +133,80 @@ public class ExperimentManagerFacade {
 		Experiment experiment = experimentsManager.getExperimentByName(experimentName);
 		experimentsManager.disableExperiment(experiment);
 		experimentsManager.enableExperiment(experiment);
-		experimentsManager.printActiveExperiments();
+		printActiveExperiments();
 	}
 
 	private void createSomeExperiment(String name) {
 		
-		Experiment dummyExperiment = randomizationService.getRandomBoolean() ? experimentsManager.createDummyExperimentRandom(name, randomizationService.getRandomLong()) : experimentsManager.createDummyExperiment50(name, randomizationService.getRandomLong());
+		Experiment dummyExperiment = randomizationService.getRandomBoolean() ? createDummyExperimentRandom(name, randomizationService.getRandomLong()) : createDummyExperiment50(name, randomizationService.getRandomLong());
 		
 		experimentsManager.createExperiment(dummyExperiment);
 		experimentsManager.enableExperiment(dummyExperiment);
-		experimentsManager.printCurrentConfiguration();
+		printCurrentConfiguration();
+	}
+	
+	
+	private Experiment createDummyExperiment50(String name, long id) {
+  		Experiment experiment = new Experiment( name, id, hashingService.getHashOfGivenString( name + id ) );
+	    List<ExperimentVariant> experimentClustersFiftyFifty = getFiftyFiftyVariantsList(experiment);
+	    experiment.setVariants(experimentClustersFiftyFifty);
+	    long randomExperimentWeight = randomizationService.getRandomLong(1, 9);
+	    experiment.setExperimentWeight(randomExperimentWeight);
+		return experiment;
+	}
+	
+	private Experiment createDummyExperimentRandom(String name, long id) {
+		Experiment experiment = new Experiment( name, id, hashingService.getHashOfGivenString( name + id ) );
+	    List<ExperimentVariant> experimentClustersFiftyFifty = getRandomVariantsList(experiment);
+	    experiment.setVariants(experimentClustersFiftyFifty);
+	    long randomExperimentWeight = randomizationService.getRandomLong(1, 9);
+	    experiment.setExperimentWeight(randomExperimentWeight);
+		return experiment;
+	}
+	
+	
+	private List<ExperimentVariant> getFiftyFiftyVariantsList(Experiment experiment){
+		List<ExperimentVariant> experimentVariantsFiftyFifty = new ArrayList<ExperimentVariant>();
+  		experimentVariantsFiftyFifty.add(new ExperimentVariant(1l, 1l, experiment.getHashKey()));
+  		experimentVariantsFiftyFifty.add(new ExperimentVariant(2l, 1l, experiment.getHashKey()));
+  		return experimentVariantsFiftyFifty;
+	}
+	
+	private List<ExperimentVariant> getRandomVariantsList(Experiment experiment){
+		List<ExperimentVariant> experimentVariantsFiftyFifty = new ArrayList<ExperimentVariant>();
+		
+		long randomNumberOfVariants = randomizationService.getRandomLong(2, 10);
+		
+		for (long i = 1l; i <= randomNumberOfVariants; i++){
+			long randomWeightOfVariant = randomizationService.getRandomLong(1, 10);
+			experimentVariantsFiftyFifty.add(new ExperimentVariant(i, randomWeightOfVariant, experiment.getHashKey()));
+		}
+  		
+  		return experimentVariantsFiftyFifty;
+	}
+	
+	
+	private ExperimentUser createDummyExperimentUser(String name){
+		ExperimentUser experimentUser = new ExperimentUser();
+		experimentUser.setUserId(name);
+		experimentUser.setHashKey( hashingService.getHashOfGivenString( name ) );
+		return experimentUser;
 	}
 
+	private void printActiveExperiments(){
+		for (Experiment allActiveExperiments : configurationService.getAllActiveExperiments()) {
+			System.out.println(allActiveExperiments.toString());
+			System.out.println("--------");
+		}
+	}
+	
+	private void printCurrentConfiguration(){
+		for (Experiment configuredExperiment : configurationService.getAllConfiguredExperiments()) {
+			System.out.println(configuredExperiment.toString());
+			for (ExperimentVariant variant : configuredExperiment.getVariants()) {
+				System.out.println(variant.toString());
+			}
+			System.out.println("--------");
+		}
+	}
 }

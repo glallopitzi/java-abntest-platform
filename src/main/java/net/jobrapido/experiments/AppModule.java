@@ -20,6 +20,8 @@ public class AppModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		bind(ExperimentManager.class).to(ExperimentManagerLocalImpl.class);
+		
 		bind(RandomizationService.class).to(RandomizationServiceHashAndPartition.class);
 		bind(UserAssignmentService.class).to(UserAssignmentServiceDefault.class);
 		bind(DataPathService.class).to(DataPathServiceDefault.class);
