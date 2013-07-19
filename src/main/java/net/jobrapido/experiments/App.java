@@ -11,7 +11,7 @@ public class App {
 	
 	public static void main( String[] args ){
         Injector injector = Guice.createInjector( new AppModule() );
-        ExperimentManagerFacade app = injector.getInstance(ExperimentManagerFacade.class);
+        ExperimentManagerApplication app = injector.getInstance(ExperimentManagerApplication.class);
         app.run();
     }
 }

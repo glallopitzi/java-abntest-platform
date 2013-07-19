@@ -1,4 +1,4 @@
-package net.jobrapido.experiments;
+package net.jobrapido.experiments.manager;
 
 import java.util.ArrayList;
 import java.util.List;

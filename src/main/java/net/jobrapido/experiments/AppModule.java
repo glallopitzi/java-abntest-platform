@@ -1,5 +1,7 @@
 package net.jobrapido.experiments;
 
+import net.jobrapido.experiments.manager.ExperimentManager;
+import net.jobrapido.experiments.manager.ExperimentManagerLocalImpl;
 import net.jobrapido.experiments.services.ConfigurationService;
 import net.jobrapido.experiments.services.DataPathService;
 import net.jobrapido.experiments.services.HashingService;

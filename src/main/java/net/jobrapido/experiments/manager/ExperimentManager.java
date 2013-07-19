@@ -1,4 +1,4 @@
-package net.jobrapido.experiments;
+package net.jobrapido.experiments.manager;
 
 import net.jobrapido.experiments.entities.Experiment;
 import net.jobrapido.experiments.entities.ExperimentUser;

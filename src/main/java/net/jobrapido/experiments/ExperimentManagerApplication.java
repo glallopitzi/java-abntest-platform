@@ -10,6 +10,7 @@ import javax.inject.Named;
 import net.jobrapido.experiments.entities.Experiment;
 import net.jobrapido.experiments.entities.ExperimentUser;
 import net.jobrapido.experiments.entities.ExperimentVariant;
+import net.jobrapido.experiments.manager.ExperimentManager;
 import net.jobrapido.experiments.services.ConfigurationService;
 import net.jobrapido.experiments.services.HashingService;
 import net.jobrapido.experiments.services.RandomizationService;
@@ -17,7 +18,7 @@ import net.jobrapido.experiments.services.RandomizationService;
 import com.google.inject.Inject;
 
 @Named
-public class ExperimentManagerFacade {
+public class ExperimentManagerApplication {
 
 	private long USER_NUMBER_TO_EVALUATE = 1000000;
 	private Map<Experiment, Integer> experimentAssignmentResult = new HashMap<Experiment, Integer>();
