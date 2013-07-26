@@ -4,7 +4,7 @@ import net.jobrapido.experiments.entities.Experiment;
 import net.jobrapido.experiments.entities.ExperimentUser;
 import net.jobrapido.experiments.entities.ExperimentVariant;
 
-public class ExperimentManagerGA implements ExperimentManager {
+public abstract class ExperimentManagerGA implements ExperimentManager {
 
 	@Override
 	public void init() {
@@ -102,6 +102,12 @@ public class ExperimentManagerGA implements ExperimentManager {
 	@Override
 	public ExperimentVariant getWinnerExperimentVariantForExperiment(
 			Experiment experiment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Experiment getExperimentById(String experimentId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

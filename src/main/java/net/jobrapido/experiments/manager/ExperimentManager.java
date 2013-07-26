@@ -18,11 +18,13 @@ public interface ExperimentManager {
 	
 	public ExperimentUser getExperimentUser(String name);
 	public Experiment getExperimentByName(String experimentName);
+	public Experiment getExperimentById(String experimentId);
 	public Experiment getExperimentForUser(ExperimentUser experimentUser);
 	public ExperimentVariant getExperimentVariantForUserAndExperiment(Experiment experiment, ExperimentUser experimentUser);
 	public void forceExperimentForUser(Experiment experiment, ExperimentUser experimentUser);
 	public void forceExperimentVariantForUser(Experiment experiment, ExperimentUser experimentUser, ExperimentVariant experimentCluster);
 	
+	public boolean fillExperimentResult(Experiment experiment);
 	public boolean checkStatisticalConfidenceForExperiment(Experiment experiment);
 	public ExperimentVariant getWinnerExperimentVariantForExperiment(Experiment experiment);
 	

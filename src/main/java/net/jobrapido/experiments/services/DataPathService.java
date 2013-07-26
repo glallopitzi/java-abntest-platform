@@ -5,4 +5,5 @@ import net.jobrapido.experiments.entities.ExperimentResult;
 
 public interface DataPathService {
 	public ExperimentResult collectLogsForExperiment(Experiment experiment);
+	public boolean fillExperimentResult(Experiment experiment);
 }

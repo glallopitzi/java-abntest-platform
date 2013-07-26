@@ -194,6 +194,42 @@ public class Experiment {
 	public void setFinishedAt(Date finishedAt) {
 		this.finishedAt = finishedAt;
 	}
+
+
+
+
+
+
+	public ExperimentOEC getOverallEvaluationCriterion() {
+		return overallEvaluationCriterion;
+	}
+
+
+
+
+
+
+	public void setOverallEvaluationCriterion(ExperimentOEC overallEvaluationCriterion) {
+		this.overallEvaluationCriterion = overallEvaluationCriterion;
+	}
+
+
+
+
+
+
+	public ExperimentResult getExperimentResult() {
+		return experimentResult;
+	}
+
+
+
+
+
+
+	public void setExperimentResult(ExperimentResult experimentResult) {
+		this.experimentResult = experimentResult;
+	}
 	
 }
 

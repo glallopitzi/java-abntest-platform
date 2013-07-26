@@ -144,6 +144,18 @@ public class ExperimentManagerLocal implements ExperimentManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Experiment getExperimentById(String experimentId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean fillExperimentResult(Experiment experiment) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 }

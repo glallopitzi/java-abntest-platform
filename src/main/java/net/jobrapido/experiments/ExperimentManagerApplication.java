@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 @Named
 public class ExperimentManagerApplication {
 
+	private String EXPERIMENT_NAME_TO_EVALUATE = "link to inbox one";
 	private long USER_NUMBER_TO_EVALUATE = 1000000;
 	private Map<Experiment, Integer> experimentAssignmentResult = new HashMap<Experiment, Integer>();
 	private Map<ExperimentVariant, Integer> variantAssignmentResult = new HashMap<ExperimentVariant, Integer>();
@@ -38,7 +39,9 @@ public class ExperimentManagerApplication {
 		
 //		createSomeExperiments();
 		
-		evaluateSomeUsers();
+//		evaluateSomeUsers();
+		
+		evaluateSomeExperiments();
 				
 //		experimentsManager.printCurrentConfiguration();
 		
@@ -50,6 +53,24 @@ public class ExperimentManagerApplication {
 	
 	
 	
+	private void evaluateSomeExperiments() {
+		// get the experiment obj
+		Experiment experimentToEvaluate = experimentsManager.getExperimentByName(EXPERIMENT_NAME_TO_EVALUATE);
+		System.out.println(experimentToEvaluate);
+		if ( experimentsManager.fillExperimentResult( experimentToEvaluate ) ) {
+			ExperimentVariant winner = experimentsManager.getWinnerExperimentVariantForExperiment(experimentToEvaluate);
+			System.out.println(winner);
+		}
+		
+		// call the evaluate method
+		// print the result
+	}
+
+
+
+
+
+
 	private void evaluateSomeUsers() {
 		
 		List<String> randomUserIds = generateRandomUserIds();
