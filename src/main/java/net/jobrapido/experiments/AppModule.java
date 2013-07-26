@@ -30,7 +30,18 @@ public class AppModule extends AbstractModule {
 		
 		try {
 	        Properties properties = new Properties();
-	        properties.load(new FileReader("config/app.properties"));
+	        String osName = System.getProperty("os.name");
+			
+			if (osName.contains("Windows")){
+				properties.load(new FileReader("config/win.app.properties"));
+			
+			} else if (osName.contains("OSX")) {
+				properties.load(new FileReader("config/osx.app.properties"));
+			
+			} else {
+				throw new RuntimeException("OS not recognized");
+			}
+			
 	        Names.bindProperties(binder(), properties);
 	    } catch (IOException ex) {
 	    	throw new RuntimeException(ex);
