@@ -12,11 +12,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 public class ConfigurationServiceFile extends ConfigurationServiceBase {
 
 	
-	private final static String CONFIGURATION_FILENAME = "C:/experimentConfigurations";
+	@Inject @Named("configuration.file") public String configurationFileName;
 	
 	
 	@Override
@@ -28,7 +30,7 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 		Gson gson = new Gson();
 		sb.append(gson.toJson(getAllConfiguredExperiments()));
 		
-		File configFile = new File(CONFIGURATION_FILENAME);
+		File configFile = new File(configurationFileName);
 		try {
 			FileUtils.touch(configFile);
 			FileUtils.writeStringToFile(configFile, sb.toString());
@@ -45,7 +47,7 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 
 	@Override
 	public boolean loadConfiguration() {
-		File configFile = new File(CONFIGURATION_FILENAME);
+		File configFile = new File(configurationFileName);
 		try {
 			ArrayList<Experiment> experiments = new ArrayList<Experiment>();
 			Gson gson = new Gson();

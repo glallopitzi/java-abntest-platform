@@ -1,5 +1,9 @@
 package net.jobrapido.experiments;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+
 import net.jobrapido.experiments.manager.ExperimentManager;
 import net.jobrapido.experiments.manager.ExperimentManagerLocal;
 import net.jobrapido.experiments.services.ConfigurationService;
@@ -17,11 +21,23 @@ import net.jobrapido.experiments.services.impl.UserAssignmentServiceDefault;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import com.google.inject.name.Names;
 
 public class AppModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		
+		try {
+	        Properties properties = new Properties();
+	        properties.load(new FileReader("config/app.properties"));
+	        Names.bindProperties(binder(), properties);
+	    } catch (IOException ex) {
+	    	System.err.println("Some error during properties load");
+	    	ex.printStackTrace();
+	    	System.exit(1);
+	    }
+		
 		bind(ExperimentManager.class).to(ExperimentManagerLocal.class);
 		
 		bind(RandomizationService.class).to(RandomizationServiceHashAndPartition.class);
