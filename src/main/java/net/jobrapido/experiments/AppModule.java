@@ -33,9 +33,7 @@ public class AppModule extends AbstractModule {
 	        properties.load(new FileReader("config/app.properties"));
 	        Names.bindProperties(binder(), properties);
 	    } catch (IOException ex) {
-	    	System.err.println("Some error during properties load");
-	    	ex.printStackTrace();
-	    	System.exit(1);
+	    	throw new RuntimeException(ex);
 	    }
 		
 		bind(ExperimentManager.class).to(ExperimentManagerLocal.class);
