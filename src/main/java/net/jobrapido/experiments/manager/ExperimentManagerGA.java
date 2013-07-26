@@ -93,4 +93,17 @@ public class ExperimentManagerGA implements ExperimentManager {
 
 	}
 
+	@Override
+	public boolean checkStatisticalConfidenceForExperiment(Experiment experiment) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ExperimentVariant getWinnerExperimentVariantForExperiment(
+			Experiment experiment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

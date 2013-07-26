@@ -1,5 +1,8 @@
 package net.jobrapido.experiments.services;
 
-public interface DataPathService {
+import net.jobrapido.experiments.entities.Experiment;
+import net.jobrapido.experiments.entities.ExperimentResult;
 
+public interface DataPathService {
+	public ExperimentResult collectLogsForExperiment(Experiment experiment);
 }

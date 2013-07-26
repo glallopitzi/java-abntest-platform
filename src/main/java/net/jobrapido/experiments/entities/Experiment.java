@@ -24,6 +24,8 @@ public class Experiment {
 	
 	private ExperimentOEC overallEvaluationCriterion;
 	
+	private ExperimentResult experimentResult;
+	
 	public Experiment(String experimentName, long id, String experimentHashKey) {
 		setId( id );
 		setActive( false );

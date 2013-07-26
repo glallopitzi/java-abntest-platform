@@ -131,6 +131,19 @@ public class ExperimentManagerLocal implements ExperimentManager {
 	public void forceExperimentVariantForUser(Experiment experiment, ExperimentUser experimentUser, ExperimentVariant experimentCluster){
 		// TODO
 	}
+
+	@Override
+	public boolean checkStatisticalConfidenceForExperiment(Experiment experiment) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ExperimentVariant getWinnerExperimentVariantForExperiment(
+			Experiment experiment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }
