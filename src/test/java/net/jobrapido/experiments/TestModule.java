@@ -23,7 +23,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
-public class AppTestModule extends AbstractModule {
+public class TestModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
@@ -34,7 +34,7 @@ public class AppTestModule extends AbstractModule {
 			if (osName.contains("Windows")){
 				properties.load(new FileReader("config/win.app.properties"));
 			
-			} else if (osName.contains("OSX")) {
+			} else if (osName.contains("OS X")) {
 				properties.load(new FileReader("config/osx.app.properties"));
 			
 			} else {

@@ -24,7 +24,7 @@ public class TestUserPartition {
 	@Before
 	public void testInit(){
 		if(injector == null)
-			injector = Guice.createInjector(new AppTestModule());
+			injector = Guice.createInjector(new TestModule());
 		
 		if (experimentManager == null)
 			experimentManager = injector.getInstance(ExperimentManager.class);
