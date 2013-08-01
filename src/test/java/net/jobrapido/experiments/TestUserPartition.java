@@ -1,5 +1,8 @@
 package net.jobrapido.experiments;
 
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import junit.framework.Assert;
@@ -36,13 +39,13 @@ public class TestUserPartition {
 	@Test
 	public void testRandomUserCreation(){
 		List<String> generateRandomUserIds = helper.generateRandomUserIds();
-		Assert.assertTrue(generateRandomUserIds.size() > 0);
+		assertTrue(generateRandomUserIds.size() > 0);
 	}
 	
 	@Test
 	public void testRandomUserAssignment(){
 		List<String> generateRandomUserIds = helper.generateRandomUserIds();
-		Assert.assertTrue(generateRandomUserIds.size() > 0);
+		assertTrue(generateRandomUserIds.size() > 0);
 
 		// TODO
 		
@@ -53,7 +56,7 @@ public class TestUserPartition {
 	public void testRandomExperimentCreation(){
 		experimentManager.init();
 		Experiment experimentByName = experimentManager.getExperimentByName("link to inbox one");
-		Assert.assertNotNull(experimentByName);
+		assertNotNull(experimentByName);
 	}
 	
 }
