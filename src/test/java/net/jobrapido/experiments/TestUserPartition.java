@@ -1,11 +1,9 @@
 package net.jobrapido.experiments;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import junit.framework.Assert;
 import net.jobrapido.experiments.entities.Experiment;
 import net.jobrapido.experiments.manager.ExperimentManager;
 
