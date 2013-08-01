@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import net.jobrapido.experiments.entities.Experiment;
+import net.jobrapido.experiments.entities.ExperimentUser;
 import net.jobrapido.experiments.manager.ExperimentManager;
 
 import org.junit.Before;
@@ -45,6 +46,11 @@ public class TestUserPartition {
 		List<String> generateRandomUserIds = helper.generateRandomUserIds();
 		assertTrue(generateRandomUserIds.size() > 0);
 
+		for (String string : generateRandomUserIds) {
+			ExperimentUser experimentUser = helper.createDummyExperimentUser(string);
+			Experiment experimentForUser = experimentManager.getExperimentForUser( experimentUser );
+			assertNotNull(experimentForUser);
+		}
 		// TODO
 		
 	}
