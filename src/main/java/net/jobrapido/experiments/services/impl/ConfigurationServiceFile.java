@@ -48,25 +48,30 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 	@Override
 	public boolean loadConfiguration() {
 		File configFile = new File(configurationFileName);
-		try {
-			ArrayList<Experiment> experiments = new ArrayList<Experiment>();
-			Gson gson = new Gson();
-			JsonParser parser = new JsonParser();
-			String configString = FileUtils.readFileToString(configFile);
-			if ( ! "".equals(configString) ){
-				JsonArray array = parser.parse(configString).getAsJsonArray();
-				for(JsonElement obj : array){
-					Experiment experiment = gson.fromJson(obj, Experiment.class);
-					experiments.add(experiment);
+		if ( configFile.exists() ) {
+			try {
+				ArrayList<Experiment> experiments = new ArrayList<Experiment>();
+				Gson gson = new Gson();
+				JsonParser parser = new JsonParser();
+				String configString = FileUtils.readFileToString(configFile);
+				if ( ! "".equals(configString) ){
+					JsonArray array = parser.parse(configString).getAsJsonArray();
+					for(JsonElement obj : array){
+						Experiment experiment = gson.fromJson(obj, Experiment.class);
+						experiments.add(experiment);
+					}
 				}
+				setAllConfiguredExperiments(experiments);
+				
+				return true;
+			} catch (IOException e) {
+				// TODO handle error condition and log somewhere
+				e.printStackTrace();
+				return false;
 			}
-			setAllConfiguredExperiments(experiments);
-			
-			return true;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+		} else {
+			// TODO log somewhere that file not exists
+			return false;			
 		}
 	}
 
@@ -74,9 +79,18 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 
 	@Override
 	public boolean deleteConfiguration() {
-		// TODO Auto-generated method stub
-		FileUtils.forceDelete(arg0);
-		return false;
+		File configFile = new File(configurationFileName);
+		if ( configFile.exists() ) {
+			try {
+				FileUtils.forceDelete(configFile);
+				return true;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	
