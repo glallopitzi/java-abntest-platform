@@ -17,8 +17,8 @@ import com.google.inject.name.Named;
 
 public class ConfigurationServiceFile extends ConfigurationServiceBase {
 
+	@Inject @Named("configuration.file") public String CONFIGURATION_FILENAME;
 	
-	@Inject @Named("configuration.file") public String configurationFileName;
 	
 	
 	@Override
@@ -30,7 +30,7 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 		Gson gson = new Gson();
 		sb.append(gson.toJson(getAllConfiguredExperiments()));
 		
-		File configFile = new File(configurationFileName);
+		File configFile = new File(CONFIGURATION_FILENAME);
 		try {
 			if ( ! configFile.exists() ) {
 				FileUtils.touch(configFile);
@@ -49,7 +49,7 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 
 	@Override
 	public boolean loadConfiguration() {
-		File configFile = new File(configurationFileName);
+		File configFile = new File(CONFIGURATION_FILENAME);
 		if ( ! configFile.exists() ) {
 			try {
 				FileUtils.touch(configFile);
@@ -90,7 +90,7 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 
 	@Override
 	public boolean deleteConfiguration() {
-		File configFile = new File(configurationFileName);
+		File configFile = new File(CONFIGURATION_FILENAME);
 		if ( configFile.exists() ) {
 			try {
 				FileUtils.forceDelete(configFile);

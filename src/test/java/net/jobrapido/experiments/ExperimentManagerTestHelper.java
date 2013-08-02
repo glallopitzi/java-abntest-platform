@@ -12,16 +12,17 @@ import net.jobrapido.experiments.services.HashingService;
 import net.jobrapido.experiments.services.RandomizationService;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 public class ExperimentManagerTestHelper {
 	
-	public long USER_NUMBER_TO_EVALUATE = 1000000;
+	@Inject @Named("numberOfUserToEvaluate") public long USER_NUMBER_TO_EVALUATE;
 	
 	@Inject private ExperimentManager experimentsManager;
 	@Inject private RandomizationService randomizationService;
 	@Inject private HashingService hashingService;
 	@Inject private ConfigurationService configurationService;
-	
+
 	
 	public List<String> generateRandomUserIds() {
 		List<String> randomeUserIds = new ArrayList<String>();

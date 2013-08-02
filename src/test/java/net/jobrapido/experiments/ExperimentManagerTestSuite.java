@@ -11,7 +11,8 @@ import com.google.inject.Injector;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-	TestUserAssignment.class 
+	TestUserAssignment.class,
+	TestStatisticalValidation.class
 	})
 public class ExperimentManagerTestSuite {
 
