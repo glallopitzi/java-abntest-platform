@@ -10,7 +10,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 @RunWith(Suite.class)
-@SuiteClasses({ TestUserAssignment.class })
+@SuiteClasses({ 
+	TestUserAssignment.class 
+	})
 public class ExperimentManagerTestSuite {
 
 	@BeforeClass 
@@ -19,7 +21,6 @@ public class ExperimentManagerTestSuite {
         Injector injector = Guice.createInjector(new ExperimentManagerTestModule());
         ExperimentManagerTestHelper helper = injector.getInstance(ExperimentManagerTestHelper.class);
         helper.createConfiguration();
-
     }
 
     @AfterClass public static void tearDownClass() { 
