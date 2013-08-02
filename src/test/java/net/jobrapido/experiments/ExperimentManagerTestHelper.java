@@ -17,12 +17,28 @@ import com.google.inject.name.Named;
 public class ExperimentManagerTestHelper {
 	
 	@Inject @Named("numberOfUserToEvaluate") public long USER_NUMBER_TO_EVALUATE;
+	@Inject @Named("experimentNameToEvaluate") public String EXPERIMENT_NAME_TO_EVALUATE;
 	
 	@Inject private ExperimentManager experimentsManager;
 	@Inject private RandomizationService randomizationService;
 	@Inject private HashingService hashingService;
 	@Inject private ConfigurationService configurationService;
 
+	
+	
+	
+	public void createConfiguration(){
+		experimentsManager.init();
+		createSomeExperiments();
+	}
+	
+	public void deleteConfiguration(){
+		configurationService.deleteConfiguration();
+	}
+	
+	
+	
+	
 	
 	public List<String> generateRandomUserIds() {
 		List<String> randomeUserIds = new ArrayList<String>();
@@ -50,14 +66,7 @@ public class ExperimentManagerTestHelper {
 		}
 	}
 	
-	public void createConfiguration(){
-		experimentsManager.init();
-		createSomeExperiments();
-	}
-	
-	public void deleteConfiguration(){
-		configurationService.deleteConfiguration();
-	}
+
 	
 	
 	

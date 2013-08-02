@@ -5,7 +5,9 @@ import org.junit.Test;
 public class TestStatisticalValidation extends ExperimentManagerTestBase {
 	
 	@Test
-	public void testStatisticalValidation(){
+	public void testExperimentEvaluation(){
+
 		// TODO
+		
 	}
 }
