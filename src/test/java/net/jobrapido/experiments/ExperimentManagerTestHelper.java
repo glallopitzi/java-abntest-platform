@@ -18,6 +18,7 @@ public class ExperimentManagerTestHelper {
 	
 	@Inject @Named("numberOfUserToEvaluate") public long USER_NUMBER_TO_EVALUATE;
 	@Inject @Named("experimentNameToEvaluate") public String EXPERIMENT_NAME_TO_EVALUATE;
+	@Inject @Named("wrongExperimentName") public String WRONG_EXPERIMENT_NAME;
 	
 	@Inject private ExperimentManager experimentsManager;
 	@Inject private RandomizationService randomizationService;
