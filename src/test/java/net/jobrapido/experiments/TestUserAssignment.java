@@ -15,22 +15,22 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 @SuppressWarnings("deprecation")
-public class TestUserPartition {
+public class TestUserAssignment {
 	
 	private Injector injector;
 	private ExperimentManager experimentManager;
-	private TestHelper helper;
+	private ExperimentManagerTestHelper helper;
 	
 	@Before
 	public void testInit(){
 		if(injector == null)
-			injector = Guice.createInjector(new TestModule());
+			injector = Guice.createInjector(new ExperimentManagerTestModule());
 		
 		if (experimentManager == null)
 			experimentManager = injector.getInstance(ExperimentManager.class);
 		
 		if(helper == null)
-			helper = injector.getInstance(TestHelper.class);
+			helper = injector.getInstance(ExperimentManagerTestHelper.class);
 	}
 	
 	

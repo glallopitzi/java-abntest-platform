@@ -23,7 +23,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
-public class TestModule extends AbstractModule {
+public class ExperimentManagerTestModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
@@ -55,7 +55,7 @@ public class TestModule extends AbstractModule {
 		bind(ConfigurationService.class).to(ConfigurationServiceFile.class).in(Singleton.class);
 		bind(HashingService.class).to(HashingServiceMD5.class);
 		
-		bind(TestHelper.class);
+		bind(ExperimentManagerTestHelper.class);
 	}
 
 }

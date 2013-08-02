@@ -14,6 +14,12 @@ public class ConfigurationServiceMongoDB extends ConfigurationServiceBase {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean deleteConfiguration() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
 }

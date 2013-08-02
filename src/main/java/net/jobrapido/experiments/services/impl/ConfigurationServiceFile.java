@@ -69,5 +69,17 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 			return false;
 		}
 	}
+
+
+
+	@Override
+	public boolean deleteConfiguration() {
+		// TODO Auto-generated method stub
+		FileUtils.forceDelete(arg0);
+		return false;
+	}
+	
+	
+	
 	
 }

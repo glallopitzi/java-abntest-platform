@@ -14,6 +14,7 @@ public interface ConfigurationService {
 	public boolean flushConfiguration();
 	public boolean flushAndReloadConfiguration();
 	public boolean loadConfiguration();
+	public boolean deleteConfiguration();
 	
 	public boolean addExperiment(Experiment experiment);
 	public boolean removeExperiment(Experiment experiment);
