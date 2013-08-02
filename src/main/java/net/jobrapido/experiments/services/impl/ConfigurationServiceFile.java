@@ -23,7 +23,7 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 	
 	@Override
 	public boolean flushConfiguration() {
-		System.out.println("flush configuration on file or over global on mongo db");
+//		System.out.println("flush configuration on file or over global on mongo db");
 		
 		StringBuilder sb = new StringBuilder(200);
 		

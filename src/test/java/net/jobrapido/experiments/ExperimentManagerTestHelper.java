@@ -27,10 +27,8 @@ public class ExperimentManagerTestHelper {
 		List<String> randomeUserIds = new ArrayList<String>();
 		for( long counter = 1; counter < USER_NUMBER_TO_EVALUATE; counter++ ){
 			long randomLong = (long) ( counter * randomizationService.getRandomDouble() );
-//			String randomString = randomizationService.getRandomString();
 			String randomEmail = randomizationService.getRandomEmailAddress();
 			String userId = randomizationService.getRandomBoolean() ? String.valueOf(randomLong) : randomEmail;
-//			System.out.println(userId);
 			randomeUserIds.add(userId);
 		}
 		return randomeUserIds;
