@@ -32,7 +32,9 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 		
 		File configFile = new File(configurationFileName);
 		try {
-			FileUtils.touch(configFile);
+			if ( ! configFile.exists() ) {
+				FileUtils.touch(configFile);
+			}
 			FileUtils.writeStringToFile(configFile, sb.toString());
 			
 			return true;
@@ -48,6 +50,15 @@ public class ConfigurationServiceFile extends ConfigurationServiceBase {
 	@Override
 	public boolean loadConfiguration() {
 		File configFile = new File(configurationFileName);
+		if ( ! configFile.exists() ) {
+			try {
+				FileUtils.touch(configFile);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		}
 		if ( configFile.exists() ) {
 			try {
 				ArrayList<Experiment> experiments = new ArrayList<Experiment>();

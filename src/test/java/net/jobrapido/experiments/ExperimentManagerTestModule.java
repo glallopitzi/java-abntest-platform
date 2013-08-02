@@ -32,10 +32,10 @@ public class ExperimentManagerTestModule extends AbstractModule {
 	        String osName = System.getProperty("os.name");
 			
 			if (osName.contains("Windows")){
-				properties.load(new FileReader("config/win.app.properties"));
+				properties.load(new FileReader("config/win.test.properties"));
 			
 			} else if (osName.contains("OS X")) {
-				properties.load(new FileReader("config/osx.app.properties"));
+				properties.load(new FileReader("config/osx.test.properties"));
 			
 			} else {
 				throw new RuntimeException("OS not recognized");

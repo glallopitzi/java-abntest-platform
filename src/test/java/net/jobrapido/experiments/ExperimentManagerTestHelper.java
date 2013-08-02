@@ -51,7 +51,12 @@ public class ExperimentManagerTestHelper {
 		}
 	}
 	
-	public void deleteConfigurationFile(){
+	public void createConfiguration(){
+		experimentsManager.init();
+		createSomeExperiments();
+	}
+	
+	public void deleteConfiguration(){
 		configurationService.deleteConfiguration();
 	}
 	
